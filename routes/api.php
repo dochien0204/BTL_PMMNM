@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('product')->group(function () {
     Route::get('', [ProductController::class, 'index'])->middleware('transaction');
+});
+
+Route::prefix('users')->group(function() {
+    Route::get('/list', [UserController::class, 'getAllUser']);
 });
