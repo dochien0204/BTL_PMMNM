@@ -17,8 +17,8 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'         => $this->faker->sentence(1, true),
-            'content'       => $this->faker->text(300),
+            'title' => $this->faker->sentence(1, true),
+            'content' => $this->faker->text(300),
             'is_published' => $this->faker->boolean(),
         ];
     }

@@ -7,8 +7,8 @@ use App\Models\User;
 use App\UseCase\DataCommonFormatter;
 use Exception;
 
-class UserRepository implements IUserRepository {
-
+class UserRepository implements IUserRepository
+{
     public function getAllUser(): DataCommonFormatter
     {
         try {

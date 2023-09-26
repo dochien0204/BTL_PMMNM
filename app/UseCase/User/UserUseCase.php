@@ -4,7 +4,7 @@ namespace App\UseCase\User;
 
 use App\UseCase\DataCommonFormatter;
 
-interface UserUseCase {
-
+interface UserUseCase
+{
     public function getAllUser(): DataCommonFormatter;
 }

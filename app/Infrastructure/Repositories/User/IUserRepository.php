@@ -4,7 +4,7 @@ namespace App\Infrastructure\Repositories\User;
 
 use App\UseCase\DataCommonFormatter;
 
-interface IUserRepository {
-
+interface IUserRepository
+{
     public function getAllUser(): DataCommonFormatter;
 }

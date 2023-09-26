@@ -2,7 +2,7 @@
 
 namespace App\Config;
 
-class Constant {
-
+class Constant
+{
     //define constant
 }

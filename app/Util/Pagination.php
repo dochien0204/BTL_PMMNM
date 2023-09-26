@@ -4,44 +4,37 @@ namespace App\Util;
 
 use Illuminate\Http\Request;
 
-class Pagination {
-
+class Pagination
+{
     private ?string $keyword;
+
     private ?int $page;
+
     private ?int $pageSize;
+
     private ?string $sortBy;
+
     private ?string $sortType;
+
     private ?int $recordCount;
 
     private ?int $displayRecord;
 
-    /**
-     * @return int|null
-     */
     public function getDisplayRecord(): ?int
     {
         return $this->displayRecord;
     }
 
-    /**
-     * @param int|null $displayRecord
-     */
     public function setDisplayRecord(?int $displayRecord): void
     {
         $this->displayRecord = $displayRecord;
     }
 
-    /**
-     * @return int|null
-     */
     public function getRecordCount(): ?int
     {
         return $this->recordCount;
     }
 
-    /**
-     * @param int|null $recordCount
-     */
     public function setRecordCount(?int $recordCount): void
     {
         $this->recordCount = $recordCount;
@@ -51,7 +44,7 @@ class Pagination {
     {
         $this->keyword = $request->query(config('paginate.KEYWORD'))
             ? $request->query(config('paginate.KEYWORD'))
-            : config('paginate.STRING_EMPTY') ;
+            : config('paginate.STRING_EMPTY');
 
         $this->page = $request->query(config('paginate.PAGE_NUM')) && is_numeric(intval($request->query(config('paginate.PAGE_NUM'))))
             ? intval($request->query(config('paginate.PAGE_NUM')))
@@ -80,23 +73,28 @@ class Pagination {
         return $offset;
     }
 
-    public function getKeyWord() {
+    public function getKeyWord()
+    {
         return $this->keyword;
     }
 
-    public function getPage() {
+    public function getPage()
+    {
         return $this->page;
     }
 
-    public function getPageSize() {
+    public function getPageSize()
+    {
         return $this->pageSize;
     }
 
-    public function getSortBy() {
+    public function getSortBy()
+    {
         return $this->sortBy;
     }
 
-    public function getSortType() {
+    public function getSortType()
+    {
         return $this->sortType;
     }
 }

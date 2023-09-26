@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,13 @@ Route::prefix('product')->group(function () {
     Route::get('', [ProductController::class, 'index'])->middleware('transaction');
 });
 
-Route::prefix('users')->group(function() {
+Route::prefix('users')->group(function () {
     Route::get('/list', [UserController::class, 'getAllUser']);
+});
+
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('me', [AuthController::class, 'me']);
 });

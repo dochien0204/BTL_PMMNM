@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\UseCase\Product\ProductUseCase;
 use Illuminate\Http\Request;
 
-
 class ProductController extends Controller
 {
-
     protected $service;
 
     public function __construct(ProductUseCase $service)
@@ -19,9 +17,6 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        return response()->json(["status" => 200]);
+        return response()->json(['status' => 200]);
     }
-
 }
-
-?>
