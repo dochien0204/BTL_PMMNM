@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Infrastructure\Repositories\PasswordResetToken\IPasswordResetTokenRepository;
+use App\Infrastructure\Repositories\PasswordResetToken\PasswordResetTokenRepository;
 use App\Infrastructure\Repositories\Product\IProductRepository;
 use App\Infrastructure\Repositories\Product\ProductRepository;
 use App\Infrastructure\Repositories\User\IUserRepository;
@@ -25,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
         //User
         $this->app->bind(IUserRepository::class, UserRepository::class);
         $this->app->bind(UserUseCase::class, UserService::class);
+
+        //Password Reset Token
+        $this->app->bind(IPasswordResetTokenRepository::class, PasswordResetTokenRepository::class);
     }
 
     /**

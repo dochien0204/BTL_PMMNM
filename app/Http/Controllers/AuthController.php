@@ -2,80 +2,244 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Jobs\SendResetPasswordJob;
+use App\Http\Jobs\VerificationAccountJob;
+use App\Http\Presenter\Response as PresenterResponse;
+use App\Http\Requests\Auth\BlockUserRequest;
+use App\Http\Requests\Auth\CreateUserRequest;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Auth\UpdateUserRequest;
+use App\Http\Requests\Auth\VerificationRequest;
+use App\UseCase\User\UserService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    private $userService;
+
+    public function __construct(UserService $userService)
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->userService = $userService;
     }
 
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function login()
+    public function login(LoginRequest $request)
     {
-        $credentials = request(['email', 'password']);
+        try {
+            $token = $this->userService->attempt($request->validated());
+            if (! $token) {
+                return PresenterResponse::responseError(Response::$statusTexts[Response::HTTP_UNAUTHORIZED], Response::HTTP_UNAUTHORIZED);
+            }
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+            return $this->respondWithToken($token);
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $this->respondWithToken($token);
     }
 
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function me()
+    public function createUser(CreateUserRequest $request)
     {
-        return response()->json(auth()->user());
+        try {
+            $data = $this->userService->createUser($request->except('password_confirmation'));
+
+            return PresenterResponse::BaseResponse(
+                Response::HTTP_OK,
+                'Create user successfully',
+                $data
+            );
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function logout()
     {
-        auth()->logout();
+        try {
+            auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+            return PresenterResponse::responseDoesNotData(
+                Response::HTTP_OK,
+                'Successfully logged out'
+            );
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh()
+    public function forgotPassword(ForgotPasswordRequest $request)
     {
-        return $this->respondWithToken(auth()->refresh());
+        try {
+            $email = $request->input('email');
+            $token = Str::random(60);
+            $this->userService->updateOrInsertPasswordReset($email, $token);
+            $resetUrl = env('APP_FRONT_URL').'reset-password/'.$token;
+            dispatch(new SendResetPasswordJob($email, $resetUrl));
+
+            return PresenterResponse::responseDoesNotData(
+                Response::HTTP_OK,
+                'Password reset email has been sent to your email,
+                please check within 30 minutes to change your password'
+            );
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string  $token
-     * @return \Illuminate\Http\JsonResponse
-     */
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $password = $request->input('password');
+            $token = $request->token;
+            $passwordResetRecord = $this->userService->getPasswordResetByToken($token);
+
+            if (! $passwordResetRecord) {
+                return PresenterResponse::responseDoesNotData(Response::HTTP_NOT_FOUND, 'Invalid token, please try it again');
+            }
+
+            //Update password
+            $passwordHashed = Hash::make($password);
+
+            $this->userService->updatePassword($passwordResetRecord->email, $passwordHashed);
+
+            //Delete password reset with old token
+            $this->userService->deletePasswordReset($token);
+
+            DB::commit();
+
+            return PresenterResponse::responseDoesNotData(
+                Response::HTTP_OK,
+                'Password reset successfully'
+            );
+        } catch (\Exception $ex) {
+            DB::rollback();
+
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function verificationSend(VerificationRequest $request)
+    {
+        try {
+            $email = $request->input('email');
+
+            $user = $this->userService->findByEmail($email);
+
+            if (! $user) {
+                return PresenterResponse::responseDoesNotData(Response::HTTP_NOT_FOUND, 'User not found');
+            }
+
+            $token = Str::random(60);
+
+            $this->userService->updateOrInsertPasswordReset($email, $token);
+
+            if ($user) {
+                $userId = $user->id;
+            }
+
+            $resetUrl = env('APP_FRONT_URL').'verify-account/'.$userId.'/'.$token;
+
+            dispatch(new VerificationAccountJob($email, $resetUrl));
+
+            return PresenterResponse::responseDoesNotData(
+                Response::HTTP_OK,
+                'Link verification account has been sent to your email, please check within 30 minutes to verification'
+            );
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function verificationGet(Request $request)
+    {
+        $userId = $request->idUser;
+
+        $dataUpdate = [
+            'email_verified_at' => now(),
+        ];
+
+        $statusVerify = $this->userService->updateUserVerified($userId, $dataUpdate);
+
+        return PresenterResponse::BaseResponse(
+            Response::HTTP_OK,
+            'Password reset successfully',
+            $statusVerify
+        );
+    }
+
+    public function getDetailUser($idUser)
+    {
+        try {
+            $data = $this->userService->getDetailUser($idUser);
+
+            return PresenterResponse::BaseResponse(
+                Response::HTTP_OK,
+                'Get information user successfully',
+                $data
+            );
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateUser($idUser, UpdateUserRequest $request)
+    {
+        try {
+            $data = $request->validated();
+
+            $result = $this->userService->updateUser($idUser, $data);
+
+            if ($result) {
+                $dataUser = $this->userService->getDetailUser($idUser);
+
+                return PresenterResponse::BaseResponse(
+                    Response::HTTP_OK,
+                    'Updated information user successfully',
+                    $dataUser
+                );
+            } else {
+                return PresenterResponse::responseDoesNotData(Response::HTTP_UNPROCESSABLE_ENTITY, 'Updated information user failed, please try it again!');
+            }
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function blockUser(BlockUserRequest $request)
+    {
+        try {
+            $userId = $request->input('id');
+
+            $statusBlocked = $this->userService->updateUserBlocked($userId);
+
+            return PresenterResponse::BaseResponse(
+                Response::HTTP_OK,
+                'Blocked user successfully',
+                $statusBlocked
+            );
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     protected function respondWithToken($token)
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-        ]);
+        return PresenterResponse::BaseResponse(
+            Response::HTTP_OK,
+            'Login successfully',
+            [
+                'token' => [
+                    'accessToken' => $token,
+                    'tokenType' => 'bearer',
+                    'expiresIn' => auth()->factory()->getTTL() * 60,
+                ],
+                'user' => auth()->user(),
+            ]
+        );
     }
 }

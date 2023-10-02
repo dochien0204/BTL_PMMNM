@@ -9,11 +9,20 @@ class Response
 {
     public static function BaseResponse(int $statusCode, string $message, mixed $results): JsonResponse
     {
-
         $response = [
             'status' => strval($statusCode),
             'message' => $message,
             'results' => $results,
+        ];
+
+        return response()->json($response, $statusCode);
+    }
+
+    public static function responseDoesNotData(int $statusCode, string $message): JsonResponse
+    {
+        $response = [
+            'status' => strval($statusCode),
+            'message' => $message,
         ];
 
         return response()->json($response, $statusCode);
@@ -42,5 +51,13 @@ class Response
             'results' => $results['data'],
             'pagination' => $results['pagination'],
         ];
+    }
+
+    public static function responseError($message, $code)
+    {
+        return response()->json([
+            'success' => false,
+            'message' => $message,
+        ], $code);
     }
 }
