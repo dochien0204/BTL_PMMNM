@@ -6,7 +6,6 @@ use App\Infrastructure\Repositories\Product\IProductRepository;
 
 class ProductService implements ProductUseCase
 {
-
     protected $productRepo;
 
     public function __construct(IProductRepository $productRepo)
@@ -14,10 +13,8 @@ class ProductService implements ProductUseCase
         $this->productRepo = $productRepo;
     }
 
-    function getProduct(string $name)
+    public function getProduct(string $name)
     {
         return $this->productRepo->getProduct();
     }
 }
-
-?>

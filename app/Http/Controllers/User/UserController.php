@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Config\Constant;
 use App\Config\Message;
 use App\Http\Controllers\Controller;
 use App\Http\Presenter\Response;
@@ -13,8 +12,8 @@ use App\Util\ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 
-class UserController extends Controller {
-
+class UserController extends Controller
+{
     private UserUseCase $service;
 
     public function __construct(UserService $service)
@@ -22,7 +21,8 @@ class UserController extends Controller {
         $this->service = $service;
     }
 
-    public function getAllUser(Request $request) {
+    public function getAllUser(Request $request)
+    {
 
         $listUser = $this->service->getAllUser();
         if ($listUser->getException() != null) {

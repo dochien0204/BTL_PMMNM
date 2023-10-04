@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,14 +16,33 @@ use App\Http\Controllers\User\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('auth')->group(function () {
+    Route::post('create-user', [AuthController::class, 'createUser']);
+    Route::post('login', [AuthController::class, 'login']);
 });
 
+// Route::middleware('auth:api')->group(function () {
 Route::prefix('product')->group(function () {
     Route::get('', [ProductController::class, 'index'])->middleware('transaction');
 });
 
-Route::prefix('users')->group(function() {
+Route::prefix('users')->group(function () {
     Route::get('/list', [UserController::class, 'getAllUser']);
 });
+
+Route::prefix('auth')->group(function () {
+    Route::post('/forget-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password/{token}', [AuthController::class, 'resetPassword']);
+
+    Route::get('/verify-account/{idUser}/{token}', [AuthController::class, 'verificationGet']);
+    Route::post('/verification', [AuthController::class, 'verificationSend']);
+
+    Route::get('/detail-user/{idUser}', [AuthController::class, 'getDetailUser']);
+    Route::post('/update-user/{idUser}', [AuthController::class, 'updateUser']);
+
+    Route::post('/block', [AuthController::class, 'blockUser']);
+
+    Route::post('logout', [AuthController::class, 'logout']);
+});
+
+// });

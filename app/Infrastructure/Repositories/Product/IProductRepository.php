@@ -6,5 +6,3 @@ interface IProductRepository
 {
     public function getProduct(string $name): string;
 }
-
-?>

@@ -10,7 +10,8 @@ class DataCommonFormatter
 
     private ?Object $data;
 
-    public function __construct($exception, $data) {
+    public function __construct($exception, $data)
+    {
         $this->data = $data;
         $this->exception = $exception;
     }
@@ -20,7 +21,7 @@ class DataCommonFormatter
         return $this->exception;
     }
 
-    public function getData(): ?Object
+    public function getData(): ?object
     {
         return $this->data;
     }

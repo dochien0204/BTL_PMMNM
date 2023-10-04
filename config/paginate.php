@@ -1,4 +1,5 @@
 <?php
+
 return [
     'KEYWORD' => 'keyword',
     'PAGE_NUM' => 'page',
@@ -9,5 +10,5 @@ return [
     'DEFAULT_PAGE_SIZE' => 10,
     'DEFAULT_SORT_BY' => 'id',
     'DEFAULT_SORT_TYPE' => 'DESC',
-    'STRING_EMPTY' => ''
+    'STRING_EMPTY' => '',
 ];
