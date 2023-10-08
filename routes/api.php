@@ -49,7 +49,7 @@ Route::prefix('auth')->group(function () {
 Route::prefix('patient')->group(function () {
     Route::get('/alls', [PatientController::class, 'getAllPatient']);
     Route::get('/detail', [PatientController::class, 'getPatientById']);
-
+    Route::post('create', [PatientController::class, 'createNewPatient'])->middleware('transaction');
 });
 
 // });

@@ -3,6 +3,7 @@
 namespace App\UseCase\Patient;
 
 use App\Infrastructure\Repositories\Patient\IPatientRepository;
+use App\Models\Patient;
 use App\UseCase\DataCommonFormatter;
 
 class PatientService implements PatientUseCase {
@@ -27,5 +28,10 @@ class PatientService implements PatientUseCase {
     public function getPatientById(int $id): DataCommonFormatter
     {
         return $this->patientRepo->getPatientById($id);
+    }
+
+    public function createPatient(Patient $patient): DataCommonFormatter
+    {
+        return $this->patientRepo->createPatient($patient);
     }
 }
