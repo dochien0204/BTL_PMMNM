@@ -11,4 +11,5 @@ interface IPatientRepository {
     public function CountAllPatients(string $keyword): int;
     public function getPatientById(int $id): DataCommonFormatter;
     public function createPatient(Patient $data): DataCommonFormatter;
+    public function deletePatientById(int $id): DataCommonFormatter;
 }
