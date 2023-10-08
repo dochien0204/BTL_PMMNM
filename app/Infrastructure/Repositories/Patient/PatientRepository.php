@@ -43,4 +43,17 @@ class PatientRepository implements IPatientRepository
 
         return $query->count();
     }
+
+    public function getPatientById(int $id): DataCommonFormatter
+    {
+        try {
+            $data = Patient::find($id);
+            if ($data == null) {
+                return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+            }
+            return new DataCommonFormatter(null, $data);
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+    }
 }
