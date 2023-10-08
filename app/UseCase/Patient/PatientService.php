@@ -34,4 +34,9 @@ class PatientService implements PatientUseCase {
     {
         return $this->patientRepo->createPatient($patient);
     }
+
+    public function deletePatientById(int $id): DataCommonFormatter
+    {
+        return $this->patientRepo->deletePatientById($id);
+    }
 }

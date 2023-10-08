@@ -74,4 +74,19 @@ class PatientController extends Controller {
 
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $result->getData());
     }
+
+    public function deletePatientById(Request $request) {
+        $id = $request->query('patientId');
+        $idInt = intval($id);
+        if ($idInt == 0) {
+            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
+        }
+
+        $result = $this->service->deletePatientById($idInt);
+        if ($result->getException() != null) {
+            return ExceptionHandler::CustomHandleException($result->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $result->getData());
+    }
 }

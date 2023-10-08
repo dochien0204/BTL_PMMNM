@@ -67,4 +67,18 @@ class PatientRepository implements IPatientRepository
 
         return new DataCommonFormatter(null, $data);
     }
+
+    public function deletePatientById(int $id): DataCommonFormatter
+    {
+        try {
+            $patient = Patient::find($id);
+            if ($patient == null) {
+                return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+            }
+            $patient->delete();
+            return new DataCommonFormatter(null, $patient);
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+    }
 }
