@@ -23,4 +23,9 @@ class PatientService implements PatientUseCase {
     {
         return $this->patientRepo->countAllPatients($keyword);
     }
+
+    public function getPatientById(int $id): DataCommonFormatter
+    {
+        return $this->patientRepo->getPatientById($id);
+    }
 }
