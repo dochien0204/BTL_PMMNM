@@ -5,17 +5,18 @@ namespace App\Http\Payload\Patient;
 class Payload {
 
     const PatientPayload = [
-        'patientGroup',
         'name',
+        'gender',
         'birthday',
         'phoneNumber',
-        'address'
+        'address',
+        'insurance_number'
     ];
 
     const ValidatePatientPayload = [
-        'patientGroup' => 'required',
         'name' => 'required',
+        'birthday' => 'required',
         'address' => 'required',
-        'phoneNumber' => 'required'
+        'phoneNumber' => 'required',
     ];
 }
