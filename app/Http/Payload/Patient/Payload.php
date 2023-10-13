@@ -10,7 +10,7 @@ class Payload {
         'birthday',
         'phoneNumber',
         'address',
-        'insurance_number'
+        'insuranceNumber'
     ];
 
     const ValidatePatientPayload = [

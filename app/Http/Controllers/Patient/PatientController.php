@@ -41,7 +41,7 @@ class PatientController extends Controller {
         $count = $this->service->countAllPatients($paginationParams->getKeyWord());
         $paginationParams->setRecordCount($count);
         $paginationParams->setDisplayRecord($patients->getData()->count());
-        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $patients->getData());
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Common::convertToListPatientPagination($paginationParams, $patients->getData()));
     }
 
     public function getPatientById(Request $request) {
