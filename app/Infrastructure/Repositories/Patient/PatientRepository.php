@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Repositories\Patient;
 
+use App\Config\Constant;
 use App\Exceptions\CustomExceptionHandler;
 use App\Models\Patient;
 use App\Models\User;
@@ -60,7 +61,17 @@ class PatientRepository implements IPatientRepository
     public function createPatient(Patient $data): DataCommonFormatter
     {
         try {
-            $data->save();
+            $patient = Patient::where("phone_number", $data->phone_number)
+                    ->where("name", $data->name)
+                    ->first();
+            if ($patient != null ){
+                $data->patient_group = Constant::OLD_PATIENT;
+                $patient->update($data->toArray());
+            } else {
+                $data->patient_group = Constant::NEW_PATIENT;
+                $data->save();
+            }
+
         } catch (Exception $exc) {
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
