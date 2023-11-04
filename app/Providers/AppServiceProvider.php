@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Infrastructure\Repositories\Medicine\IMedicineRepository;
+use App\Infrastructure\Repositories\Medicine\MedicineRepository;
 use App\Infrastructure\Repositories\PasswordResetToken\IPasswordResetTokenRepository;
 use App\Infrastructure\Repositories\PasswordResetToken\PasswordResetTokenRepository;
 use App\Infrastructure\Repositories\Patient\IPatientRepository;
@@ -10,6 +12,8 @@ use App\Infrastructure\Repositories\Product\IProductRepository;
 use App\Infrastructure\Repositories\Product\ProductRepository;
 use App\Infrastructure\Repositories\User\IUserRepository;
 use App\Infrastructure\Repositories\User\UserRepository;
+use App\UseCase\Medicine\MedicineService;
+use App\UseCase\Medicine\MedicineUseCase;
 use App\UseCase\Patient\PatientService;
 use App\UseCase\Patient\PatientUseCase;
 use App\UseCase\Product\ProductService;
@@ -38,6 +42,10 @@ class AppServiceProvider extends ServiceProvider
         //Patient
         $this->app->bind(IPatientRepository::class, PatientRepository::class);
         $this->app->bind(PatientUseCase::class, PatientService::class);
+
+        //Medicine
+        $this->app->bind(IMedicineRepository::class, MedicineRepository::class);
+        $this->app->bind(MedicineUseCase::class, MedicineService::class);
     }
 
     /**
