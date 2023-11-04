@@ -32,7 +32,7 @@ class AuthController extends Controller
     {
         try {
             $token = $this->userService->attempt($request->validated());
-            if (! $token) {
+            if (!$token) {
                 return PresenterResponse::responseError(Response::$statusTexts[Response::HTTP_UNAUTHORIZED], Response::HTTP_UNAUTHORIZED);
             }
 
@@ -57,6 +57,20 @@ class AuthController extends Controller
         }
     }
 
+    public function me()
+    {
+        $data = auth()->user();
+        if ($data) {
+            return PresenterResponse::BaseResponse(
+                Response::HTTP_OK,
+                'Get information user successfully',
+                $data
+            );
+        } else {
+            return PresenterResponse::responseError("Retrieving information failed because you are not logged in!", Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
     public function logout()
     {
         try {
@@ -77,13 +91,12 @@ class AuthController extends Controller
             $email = $request->input('email');
             $token = Str::random(60);
             $this->userService->updateOrInsertPasswordReset($email, $token);
-            $resetUrl = env('APP_FRONT_URL').'reset-password/'.$token;
+            $resetUrl = env('APP_FRONT_URL') . 'auth/reset-password/' . $token;
             dispatch(new SendResetPasswordJob($email, $resetUrl));
 
             return PresenterResponse::responseDoesNotData(
                 Response::HTTP_OK,
-                'Password reset email has been sent to your email,
-                please check within 30 minutes to change your password'
+                'Password reset email has been sent to your email, please check within 30 minutes to change your password'
             );
         } catch (\Exception $ex) {
             return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -98,7 +111,7 @@ class AuthController extends Controller
             $token = $request->token;
             $passwordResetRecord = $this->userService->getPasswordResetByToken($token);
 
-            if (! $passwordResetRecord) {
+            if (!$passwordResetRecord) {
                 return PresenterResponse::responseDoesNotData(Response::HTTP_NOT_FOUND, 'Invalid token, please try it again');
             }
 
@@ -130,7 +143,7 @@ class AuthController extends Controller
 
             $user = $this->userService->findByEmail($email);
 
-            if (! $user) {
+            if (!$user) {
                 return PresenterResponse::responseDoesNotData(Response::HTTP_NOT_FOUND, 'User not found');
             }
 
@@ -142,7 +155,7 @@ class AuthController extends Controller
                 $userId = $user->id;
             }
 
-            $resetUrl = env('APP_FRONT_URL').'verify-account/'.$userId.'/'.$token;
+            $resetUrl = env('APP_FRONT_URL') . 'verify-account/' . $userId . '/' . $token;
 
             dispatch(new VerificationAccountJob($email, $resetUrl));
 
