@@ -40,4 +40,23 @@ class MedicineService implements MedicineUseCase {
         return $this->medicineRepo->deleteMedicineById($id);
     }
 
+    public function updateMedicine(array $data): DataCommonFormatter {
+
+        $medicineUpdate = $this->medicineRepo->getMedicineById($data['id']);
+        if ($medicineUpdate->getException() != null) {
+            return new DataCommonFormatter($medicineUpdate->getException(), null);
+        }
+
+        $medicineEntity = $medicineUpdate->getData();
+        $medicineEntity->name = $data['name'];
+        $medicineEntity->expired_date = $data['expired_date'];
+        $medicineEntity->publisher = $data['publisher'];
+        $medicineEntity->ingredient = $data['ingredient'];
+        $medicineEntity->unit = $data['unit'];
+        $medicineEntity->quantity = $data['quantity'];
+        $medicineEntity->price = $data['price'];
+
+        return $this->medicineRepo->updateMedicine($medicineEntity);
+    }
+
 }

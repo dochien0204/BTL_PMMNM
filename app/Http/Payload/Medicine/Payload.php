@@ -13,6 +13,7 @@ class Payload {
         'instruction',
         'ingredient',
         'unit',
+        'quantity',
         'price'
     ];
 
@@ -25,6 +26,29 @@ class Payload {
         'instruction' => 'required',
         'ingredient' => 'required',
         'unit' => 'required',
+        'quantity' => 'required',
+        'price' => 'required'
+    ];
+
+    const UpdateMedicine = [
+        'id',
+        'name',
+        'expiredDate',
+        'publisher',
+        'ingredient',
+        'unit',
+        'quantity',
+        'price'
+    ];
+
+    const ValidatUpdateMedicinePayload = [
+        'id' => 'required',
+        'name' => 'required',
+        'expiredDate' => 'required',
+        'publisher' => 'required',
+        'ingredient' => 'required',
+        'unit' => 'required',
+        'quantity' => 'required',
         'price' => 'required'
     ];
 }

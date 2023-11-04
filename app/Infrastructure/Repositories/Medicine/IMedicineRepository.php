@@ -11,4 +11,5 @@ interface IMedicineRepository {
     public function getMedicineById(int $id): DataCommonFormatter;
     public function createMedicine(Medicine $data): DataCommonFormatter;
     public function deleteMedicineById(int $id): DataCommonFormatter;
+    public function updateMedicine(Medicine $data): DataCommonFormatter;
 }

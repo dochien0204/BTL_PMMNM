@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Medicine;
 
+use App\Config\Constant;
 use App\Config\Message;
 use App\Exceptions\CustomExceptionHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Payload\Medicine\Payload;
 use App\Http\Presenter\Response;
 use App\UseCase\Medicine\MedicineUseCase;
+use App\Util\Common as UtilCommon;
 use App\Util\ExceptionHandler;
 use App\Util\Pagination;
 use Illuminate\Http\Request;
@@ -82,6 +84,21 @@ class MedicineController extends Controller {
 
         $results = $this->service->deleteMedicineById($idInt);
         if ($results->getException() != null ){
+            return ExceptionHandler::CustomHandleException($results->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, null);
+    }
+
+    public function updateMedicine(Request $request) {
+        $payload = $request->only(Payload::UpdateMedicine);
+        $validator = Validator::make($payload, Payload::ValidatUpdateMedicinePayload);
+        if ($validator->fails()) {
+            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
+        } 
+
+        $results = $this->service->updateMedicine(UtilCommon::convertKeysToCase(Constant::SNAKE_CASE, $payload));
+        if ($results->getException() != null) {
             return ExceptionHandler::CustomHandleException($results->getException());
         }
 
