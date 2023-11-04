@@ -61,6 +61,7 @@ Route::prefix('medicine')->group(function () {
     Route::get('/detail', [MedicineController::class, 'getMedicineById']);
     Route::post('/create', [MedicineController::class, 'createNewMedicine'])->middleware('transaction');
     Route::delete('/delete', [MedicineController::class, 'deleteMedicine'])->middleware('transaction');
+    Route::put('/update', [MedicineController::class, 'updateMedicine'])->middleware('transaction');
 });
 
 // });

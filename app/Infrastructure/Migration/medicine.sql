@@ -12,3 +12,5 @@ CREATE TABLE `medicine` (
   `created_at` timestamp DEFAULT (now()),
   `updated_at` timestamp DEFAULT (now())
 );
+
+ALTER TABLE medicine ADD quantity int;

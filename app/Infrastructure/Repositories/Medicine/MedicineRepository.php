@@ -85,4 +85,15 @@ class MedicineRepository implements IMedicineRepository{
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
     }
+
+    public function updateMedicine(Medicine $data): DataCommonFormatter {
+        try {
+            $data->save();
+        } catch(Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $data);
+
+    }
 }
