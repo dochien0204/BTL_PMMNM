@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Medicine\MedicineController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
@@ -51,6 +52,14 @@ Route::prefix('patient')->group(function () {
     Route::get('/detail', [PatientController::class, 'getPatientById']);
     Route::post('/create', [PatientController::class, 'createNewPatient'])->middleware('transaction');
     Route::delete('/delete', [PatientController::class, 'deletePatientById'])->middleware('transaction');
+});
+
+//Medicine
+Route::prefix('medicine')->group(function () {
+    Route::get('/alls', [MedicineController::class, 'getAllMedicines']);
+    Route::get('/detail', [MedicineController::class, 'getMedicineById']);
+    Route::post('/create', [MedicineController::class, 'createNewMedicine'])->middleware('transaction');
+    Route::delete('/delete', [MedicineController::class, 'deleteMedicine'])->middleware('transaction');
 });
 
 // });
