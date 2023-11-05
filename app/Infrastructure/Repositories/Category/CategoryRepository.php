@@ -33,4 +33,17 @@ class CategoryRepository implements ICategoryRepository {
 
         return new DataCommonFormatter(null, $categories->get());
     }
+
+    public function findById(int $id): DataCommonFormatter {
+        try {
+            $data = Category::where('id', $id)->first();
+            if ($data == null) {
+                return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+            }
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $data);
+    }
 }

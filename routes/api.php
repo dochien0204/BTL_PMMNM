@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\MedicalRegistrationForm\MedicalRegistrationFormController;
 use App\Http\Controllers\Medicine\MedicineController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Product\ProductController;
@@ -68,4 +69,9 @@ Route::prefix('medicine')->group(function () {
 //Master data
 Route::prefix('master')->group(function () {
     Route::get('/category', [CategoryController::class, 'getAllCategoryByType']);
+});
+
+//Medical Registration Form
+Route::prefix('medical-registration-form')->group(function () {
+    Route::post('/create', [MedicalRegistrationFormController::class, 'createMedicalRegistrationForm'])->middleware('transaction');
 });
