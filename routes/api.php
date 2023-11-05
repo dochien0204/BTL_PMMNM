@@ -40,6 +40,7 @@ Route::prefix('auth')->group(function () {
     Route::get('/verify-account/{idUser}/{token}', [AuthController::class, 'verificationGet']);
     Route::post('/verification', [AuthController::class, 'verificationSend']);
 
+    Route::get('/me', [AuthController::class, 'me']);
     Route::get('/detail-user/{idUser}', [AuthController::class, 'getDetailUser']);
     Route::post('/update-user/{idUser}', [AuthController::class, 'updateUser']);
 
@@ -68,5 +69,3 @@ Route::prefix('medicine')->group(function () {
 Route::prefix('master')->group(function () {
     Route::get('/category', [CategoryController::class, 'getAllCategoryByType']);
 });
-
-// });

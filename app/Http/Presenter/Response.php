@@ -56,8 +56,9 @@ class Response
     public static function responseError($message, $code)
     {
         return response()->json([
+            'status'=> $code,
             'success' => false,
             'message' => $message,
-        ], $code);
+        ]);
     }
 }
