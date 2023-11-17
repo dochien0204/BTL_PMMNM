@@ -7,8 +7,8 @@ use App\Models\Category;
 use App\UseCase\DataCommonFormatter;
 use Exception;
 
-class CategoryRepository implements ICategoryRepository {
-
+class CategoryRepository implements ICategoryRepository
+{
     public function getCategoryByCode(string $code): DataCommonFormatter
     {
         try {
@@ -16,7 +16,7 @@ class CategoryRepository implements ICategoryRepository {
             if ($data == null) {
                 return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
             }
-        } catch(Exception $exc) {
+        } catch (Exception $exc) {
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
 
@@ -27,7 +27,7 @@ class CategoryRepository implements ICategoryRepository {
     {
         try {
             $categories = Category::where('type', $type);
-        } catch(Exception $exc) {
+        } catch (Exception $exc) {
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
 

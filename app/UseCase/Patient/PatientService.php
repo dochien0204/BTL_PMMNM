@@ -6,8 +6,8 @@ use App\Infrastructure\Repositories\Patient\IPatientRepository;
 use App\Models\Patient;
 use App\UseCase\DataCommonFormatter;
 
-class PatientService implements PatientUseCase {
-
+class PatientService implements PatientUseCase
+{
     protected IPatientRepository $patientRepo;
 
     public function __construct(IPatientRepository $patientRepo)

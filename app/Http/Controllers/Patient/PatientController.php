@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Validator;
 
-class PatientController extends Controller {
-
+class PatientController extends Controller
+{
     public PatientUseCase $service;
 
     public function __construct(PatientUseCase $service)
@@ -25,7 +25,8 @@ class PatientController extends Controller {
         $this->service = $service;
     }
 
-    public function getAllPatient(Request $request) {
+    public function getAllPatient(Request $request)
+    {
         $paginationParams = new Pagination($request);
 
         $patients = $this->service->getAllPatients(
@@ -43,10 +44,12 @@ class PatientController extends Controller {
         $count = $this->service->countAllPatients($paginationParams->getKeyWord());
         $paginationParams->setRecordCount($count);
         $paginationParams->setDisplayRecord($patients->getData()->count());
+
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Common::convertToListPatientPagination($paginationParams, $patients->getData()));
     }
 
-    public function getPatientById(Request $request) {
+    public function getPatientById(Request $request)
+    {
         $id = $request->query('patientId');
         $idInt = intval($id);
         if ($idInt == 0) {
@@ -61,7 +64,8 @@ class PatientController extends Controller {
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $data->getData());
     }
 
-    public function createNewPatient(Request $request) {
+    public function createNewPatient(Request $request)
+    {
         $payload = $request->only(Payload::PatientPayload);
         $validator = Validator::make($payload, Payload::ValidatePatientPayload);
         if ($validator->fails()) {
@@ -77,7 +81,8 @@ class PatientController extends Controller {
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $result->getData());
     }
 
-    public function deletePatientById(Request $request) {
+    public function deletePatientById(Request $request)
+    {
         $id = $request->query('patientId');
         $idInt = intval($id);
         if ($idInt == 0) {
@@ -90,20 +95,5 @@ class PatientController extends Controller {
         }
 
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $result->getData());
-    }
-
-    public function updatePatient(Request $request) {
-        $payload = $request->only(Payload::UpdatePatientPayload);
-        $validator = Validator::make($payload, Payload::ValidateUpdatePatientPayload);
-        if ($validator->fails()) {
-            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
-        }
-
-        $results = $this->service->updatePatient(UtilCommon::convertKeysToCase(Constant::SNAKE_CASE, $payload));
-        if ($results->getException() != null) {
-            return ExceptionHandler::CustomHandleException($results->getException());
-        }
-
-        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $results->getData());
     }
 }

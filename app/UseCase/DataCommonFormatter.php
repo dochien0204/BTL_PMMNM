@@ -8,7 +8,7 @@ class DataCommonFormatter
 {
     private ?Exception $exception;
 
-    private ?Object $data;
+    private ?object $data;
 
     public function __construct($exception, $data)
     {

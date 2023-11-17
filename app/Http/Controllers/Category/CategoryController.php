@@ -11,8 +11,8 @@ use App\Util\ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 
-class CategoryController extends Controller {
-
+class CategoryController extends Controller
+{
     private CategoryUseCase $service;
 
     public function __construct(CategoryUseCase $service)
@@ -20,7 +20,8 @@ class CategoryController extends Controller {
         $this->service = $service;
     }
 
-    public function getAllCategoryByType(Request $request) {
+    public function getAllCategoryByType(Request $request)
+    {
         $type = $request->query('type');
         if ($type == null) {
             return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());

@@ -35,6 +35,7 @@ Route::prefix('users')->group(function () {
     Route::get('/list', [UserController::class, 'getAllUser']);
 });
 
+// Authentication
 Route::prefix('auth')->group(function () {
     Route::post('/forget-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password/{token}', [AuthController::class, 'resetPassword']);

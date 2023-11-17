@@ -8,17 +8,20 @@ use App\Util\Common as UtilCommon;
 use App\Util\Pagination;
 use Illuminate\Database\Eloquent\Collection;
 
-class Common {
-
-    public static function convertPatientPayloadToEntity(array $data) {
+class Common
+{
+    public static function convertPatientPayloadToEntity(array $data)
+    {
         $data = UtilCommon::convertKeysToCase(Constant::SNAKE_CASE, $data);
         $patient = new Patient();
         $patient->fill($data);
+
         return $patient;
     }
 
-    public static function convertToListPatientPagination(Pagination $pagination, Collection $listData) {
-        $listDataConvert = $listData->map(function($item) {
+    public static function convertToListPatientPagination(Pagination $pagination, Collection $listData)
+    {
+        $listDataConvert = $listData->map(function ($item) {
             return [
                 'id' => $item->id,
                 'patientGroup' => $item->patient_group,
@@ -27,7 +30,7 @@ class Common {
                 'birthday' => $item->birthday,
                 'phoneNumber' => $item->phone_number,
                 'address' => $item->address,
-                'insuranceNumber' => $item->insurance_number
+                'insuranceNumber' => $item->insurance_number,
             ];
         });
 
@@ -35,12 +38,12 @@ class Common {
             'count' => $pagination->getRecordCount(),
             'numPages' => ceil($pagination->getRecordCount() / $pagination->getPageSize()),
             'displayRecord' => $pagination->getDisplayRecord(),
-            'page' => $pagination->getPage()
+            'page' => $pagination->getPage(),
         ];
 
         return [
             'results' => $listDataConvert,
-            'pagination' => $dataPaging
+            'pagination' => $dataPaging,
         ];
     }
 }

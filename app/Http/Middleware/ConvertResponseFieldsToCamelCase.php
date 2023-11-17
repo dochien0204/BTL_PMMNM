@@ -10,12 +10,12 @@ use Illuminate\Support\Str;
 class ConvertResponseFieldsToCamelCase
 {
     public const CASE_SNAKE = 'snake';
+
     public const CASE_CAMEL = 'camel';
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -29,12 +29,13 @@ class ConvertResponseFieldsToCamelCase
                 )
             );
         }
+
         return $response;
     }
 
     public function convertKeysToCase(string $case, $data)
     {
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             return $data;
         }
 

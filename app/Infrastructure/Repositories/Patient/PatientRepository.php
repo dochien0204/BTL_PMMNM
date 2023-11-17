@@ -5,40 +5,40 @@ namespace App\Infrastructure\Repositories\Patient;
 use App\Config\Constant;
 use App\Exceptions\CustomExceptionHandler;
 use App\Models\Patient;
-use App\Models\User;
 use App\UseCase\DataCommonFormatter;
 use App\Util\Pagination;
 use Exception;
 
 class PatientRepository implements IPatientRepository
 {
-
     public function getAllPatients(string $keyword, int $page, int $size, string $sortBy, string $sortType): DataCommonFormatter
     {
         try {
             $query = Patient::query();
             $filterColumn = [];
-            if (!empty($keyword) && !empty($filterColumn)) {
+            if (! empty($keyword) && ! empty($filterColumn)) {
                 $query->where($filterColumn[0], $keyword);
             }
             $query->orderBy($sortBy, $sortType);
             $offset = Pagination::calculateOffset($page, $size);
             $query->offset($offset);
             $query->limit($size);
+
             return new DataCommonFormatter(null, $query->get());
-        } catch(Exception $exc) {
+        } catch (Exception $exc) {
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
     }
 
-    public function CountAllPatients(string $keyword): int {
+    public function CountAllPatients(string $keyword): int
+    {
         try {
             $query = Patient::query();
             $filterColumn = [];
-            if (!empty($keyword) && !empty($filterColumn)) {
+            if (! empty($keyword) && ! empty($filterColumn)) {
                 $query->where($filterColumn[0], $keyword);
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new Exception($e);
         }
 
@@ -52,6 +52,7 @@ class PatientRepository implements IPatientRepository
             if ($data == null) {
                 return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
             }
+
             return new DataCommonFormatter(null, $data);
         } catch (Exception $exc) {
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
@@ -61,10 +62,10 @@ class PatientRepository implements IPatientRepository
     public function createPatient(Patient $data): DataCommonFormatter
     {
         try {
-            $patient = Patient::where("phone_number", $data->phone_number)
-                    ->where("name", $data->name)
-                    ->first();
-            if ($patient != null ){
+            $patient = Patient::where('phone_number', $data->phone_number)
+                ->where('name', $data->name)
+                ->first();
+            if ($patient != null) {
                 $data->patient_group = Constant::OLD_PATIENT;
                 $patient->update($data->toArray());
             } else {
@@ -87,20 +88,10 @@ class PatientRepository implements IPatientRepository
                 return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
             }
             $patient->delete();
+
             return new DataCommonFormatter(null, $patient);
         } catch (Exception $exc) {
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
-    }
-
-    public function updatePatient(Patient $data): DataCommonFormatter
-    {
-        try {
-            $data->save();
-        } catch(Exception $exc) {
-            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
-        }
-
-        return new DataCommonFormatter(null, $data);
     }
 }
