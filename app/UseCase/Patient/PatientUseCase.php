@@ -13,4 +13,5 @@ interface PatientUseCase
     public function getPatientById(int $id): DataCommonFormatter;
     public function createPatient(Patient $patient): DataCommonFormatter;
     public function deletePatientById(int $id): DataCommonFormatter;
+    public function updatePatient(array $data): DataCommonFormatter;
 }

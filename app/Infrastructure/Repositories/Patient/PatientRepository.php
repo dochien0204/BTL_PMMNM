@@ -92,4 +92,15 @@ class PatientRepository implements IPatientRepository
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
     }
+
+    public function updatePatient(Patient $data): DataCommonFormatter
+    {
+        try {
+            $data->save();
+        } catch(Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $data);
+    }
 }

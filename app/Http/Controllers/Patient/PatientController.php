@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Patient;
 
+use App\Config\Constant;
 use App\Config\Message;
 use App\Exceptions\CustomExceptionHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Payload\Patient\Payload;
 use App\Http\Presenter\Response;
 use App\UseCase\Patient\PatientUseCase;
+use App\Util\Common;
 use App\Util\ExceptionHandler;
 use App\Util\Pagination;
 use Illuminate\Http\Request;
@@ -88,5 +90,20 @@ class PatientController extends Controller {
         }
 
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $result->getData());
+    }
+
+    public function updatePatient(Request $request) {
+        $payload = $request->only(Payload::UpdatePatientPayload);
+        $validator = Validator::make($payload, Payload::ValidateUpdatePatientPayload);
+        if ($validator->fails()) {
+            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
+        }
+
+        $results = $this->service->updatePatient(Common::convertKeysToCase(Constant::SNAKE_CASE, $payload));
+        if ($results->getException() != null) {
+            return ExceptionHandler::CustomHandleException($results->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $results->getData());
     }
 }

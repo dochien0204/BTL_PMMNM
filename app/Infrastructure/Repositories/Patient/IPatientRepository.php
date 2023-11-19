@@ -12,4 +12,5 @@ interface IPatientRepository {
     public function getPatientById(int $id): DataCommonFormatter;
     public function createPatient(Patient $data): DataCommonFormatter;
     public function deletePatientById(int $id): DataCommonFormatter;
+    public function updatePatient(Patient $data): DataCommonFormatter;
 }
