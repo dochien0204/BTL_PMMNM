@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Payload\Patient\Payload;
 use App\Http\Presenter\Response;
 use App\UseCase\Patient\PatientUseCase;
-use App\Util\Common;
+use App\Util\Common as UtilCommon;
 use App\Util\ExceptionHandler;
 use App\Util\Pagination;
 use Illuminate\Http\Request;
@@ -99,7 +99,7 @@ class PatientController extends Controller {
             return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
         }
 
-        $results = $this->service->updatePatient(Common::convertKeysToCase(Constant::SNAKE_CASE, $payload));
+        $results = $this->service->updatePatient(UtilCommon::convertKeysToCase(Constant::SNAKE_CASE, $payload));
         if ($results->getException() != null) {
             return ExceptionHandler::CustomHandleException($results->getException());
         }
