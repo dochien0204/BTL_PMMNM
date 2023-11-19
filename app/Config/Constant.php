@@ -15,4 +15,7 @@ class Constant
     //Patient Group
     const OLD_PATIENT = 'old_patient';
     const NEW_PATIENT = 'new_patient';
+
+    //Default code
+    const DEFAULT_CODE = 'default_code';
 }

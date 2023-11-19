@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\Master\MasterController;
+use App\Http\Controllers\MedicalRegistrationForm\MedicalRegistrationFormController;
 use App\Http\Controllers\Medicine\MedicineController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
+use App\Models\MedicalRegistrationForm;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,4 +71,11 @@ Route::prefix('medicine')->group(function () {
 //Master data
 Route::prefix('master')->group(function () {
     Route::get('/category', [CategoryController::class, 'getAllCategoryByType']);
+    Route::get('/status', [MasterController::class, 'getAllStatusByType']);
+});
+
+//Medical Registration Form
+Route::prefix('medical-registration-form')->group(function () {
+    Route::post('/create', [MedicalRegistrationFormController::class, 'createMedicalRegistrationForm'])->middleware('transaction');
+    Route::get('/alls', [MedicalRegistrationFormController::class, 'getListMedicalRegistrationForms']);
 });

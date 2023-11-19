@@ -8,4 +8,5 @@ interface ICategoryRepository {
 
     public function getCategoryByCode(string $code): DataCommonFormatter;
     public function getAllCategoryByType(string $type): DataCommonFormatter;
+    public function findById(int $id): DataCommonFormatter;
 }

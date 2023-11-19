@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Infrastructure\Repositories\Category\CategoryRepository;
 use App\Infrastructure\Repositories\Category\ICategoryRepository;
+use App\Infrastructure\Repositories\MedicalRegistrationForm\IMedicalRegistrationFormRepository;
+use App\Infrastructure\Repositories\MedicalRegistrationForm\MedicalRegistrationFormRepository;
 use App\Infrastructure\Repositories\Medicine\IMedicineRepository;
 use App\Infrastructure\Repositories\Medicine\MedicineRepository;
 use App\Infrastructure\Repositories\PasswordResetToken\IPasswordResetTokenRepository;
@@ -12,10 +14,16 @@ use App\Infrastructure\Repositories\Patient\IPatientRepository;
 use App\Infrastructure\Repositories\Patient\PatientRepository;
 use App\Infrastructure\Repositories\Product\IProductRepository;
 use App\Infrastructure\Repositories\Product\ProductRepository;
+use App\Infrastructure\Repositories\Status\IStatusRepository;
+use App\Infrastructure\Repositories\Status\StatusRepository;
 use App\Infrastructure\Repositories\User\IUserRepository;
 use App\Infrastructure\Repositories\User\UserRepository;
 use App\UseCase\Category\CategoryService;
 use App\UseCase\Category\CategoryUseCase;
+use App\UseCase\Master\MasterService;
+use App\UseCase\Master\MasterUseCase;
+use App\UseCase\MedicalRegistrationForm\MedicalRegistrationFormService;
+use App\UseCase\MedicalRegistrationForm\MedicalRegistrationFormUseCase;
 use App\UseCase\Medicine\MedicineService;
 use App\UseCase\Medicine\MedicineUseCase;
 use App\UseCase\Patient\PatientService;
@@ -54,6 +62,14 @@ class AppServiceProvider extends ServiceProvider
         //Category
         $this->app->bind(ICategoryRepository::class, CategoryRepository::class);
         $this->app->bind(CategoryUseCase::class, CategoryService::class);
+
+        //Medical Registration Form
+        $this->app->bind(IMedicalRegistrationFormRepository::class, MedicalRegistrationFormRepository::class);
+        $this->app->bind(MedicalRegistrationFormUseCase::class, MedicalRegistrationFormService::class);
+
+        //Master data
+        $this->app->bind(IStatusRepository::class, StatusRepository::class);
+        $this->app->bind(MasterUseCase::class, MasterService::class);
     }
 
     /**

@@ -59,4 +59,17 @@ class UserRepository extends EloquentRepository implements IUserRepository
     {
         return $this->_model::where('email', $email)?->update(['password' => $password]);
     }
+
+    public function findById(int $id): DataCommonFormatter {
+        try {
+            $data = User::where('id', $id)->first();
+            if ($data == null) {
+                return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+            }
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $data);
+    }
 }
