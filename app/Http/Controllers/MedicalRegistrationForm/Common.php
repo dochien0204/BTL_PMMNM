@@ -10,9 +10,9 @@ class Common {
 
     public static function convertToListMedicalRegistrationFormPagination(Pagination $pagination, Collection $listData) {
         $listDataConvert = $listData->map(function($item) {
-            $doctor = $item->doctor();
-            $patient = $item->patient();
-            $category = $item->category();
+            $doctor = $item->doctor;
+            $patient = $item->patient;
+            $category = $item->category;
             return [
                 'id' => $item->id,
                 'code' => $item->code,
