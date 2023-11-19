@@ -19,4 +19,22 @@ class Payload {
         'address' => 'required',
         'phoneNumber' => 'required',
     ];
+
+    const UpdatePatientPayload = [
+        'id',
+        'name',
+        'address',
+        'phoneNumber',
+        'gender',
+        'insuranceNumber'
+    ];
+
+    const ValidateUpdatePatientPayload = [
+        'id' => 'required',
+        'name' => 'required',
+        'address' => 'required',
+        'phoneNumber' => 'required',
+        'gender' => 'required',
+        'insuranceNumber' => 'required'
+    ];
 }

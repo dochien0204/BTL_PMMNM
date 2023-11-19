@@ -57,6 +57,7 @@ Route::prefix('patient')->group(function () {
     Route::get('/detail', [PatientController::class, 'getPatientById']);
     Route::post('/create', [PatientController::class, 'createNewPatient'])->middleware('transaction');
     Route::delete('/delete', [PatientController::class, 'deletePatientById'])->middleware('transaction');
+    Route::put('/update', [PatientController::class, 'updatePatient'])->middleware('transaction');
 });
 
 //Medicine

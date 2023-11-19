@@ -39,4 +39,21 @@ class PatientService implements PatientUseCase {
     {
         return $this->patientRepo->deletePatientById($id);
     }
+
+    public function updatePatient(array $data): DataCommonFormatter
+    {
+        $patient = $this->patientRepo->getPatientById($data['id']);
+        if ($patient->getException() != null) {
+            return new DataCommonFormatter($patient->getException(), null);
+        }
+
+        $patientUpdate = $patient->getData();
+        $patientUpdate->name = $data['name'];
+        $patientUpdate->phone_number = $data['phone_number'];
+        $patientUpdate->address = $data['address'];
+        $patientUpdate->gender = $data['gender'];
+        $patientUpdate->insurance_number = $data['insurance_number'];
+
+        return $this->patientRepo->updatePatient($patientUpdate);
+    }
 }
