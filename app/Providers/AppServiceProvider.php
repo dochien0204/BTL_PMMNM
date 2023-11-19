@@ -14,10 +14,14 @@ use App\Infrastructure\Repositories\Patient\IPatientRepository;
 use App\Infrastructure\Repositories\Patient\PatientRepository;
 use App\Infrastructure\Repositories\Product\IProductRepository;
 use App\Infrastructure\Repositories\Product\ProductRepository;
+use App\Infrastructure\Repositories\Status\IStatusRepository;
+use App\Infrastructure\Repositories\Status\StatusRepository;
 use App\Infrastructure\Repositories\User\IUserRepository;
 use App\Infrastructure\Repositories\User\UserRepository;
 use App\UseCase\Category\CategoryService;
 use App\UseCase\Category\CategoryUseCase;
+use App\UseCase\Master\MasterService;
+use App\UseCase\Master\MasterUseCase;
 use App\UseCase\MedicalRegistrationForm\MedicalRegistrationFormService;
 use App\UseCase\MedicalRegistrationForm\MedicalRegistrationFormUseCase;
 use App\UseCase\Medicine\MedicineService;
@@ -62,6 +66,10 @@ class AppServiceProvider extends ServiceProvider
         //Medical Registration Form
         $this->app->bind(IMedicalRegistrationFormRepository::class, MedicalRegistrationFormRepository::class);
         $this->app->bind(MedicalRegistrationFormUseCase::class, MedicalRegistrationFormService::class);
+
+        //Master data
+        $this->app->bind(IStatusRepository::class, StatusRepository::class);
+        $this->app->bind(MasterUseCase::class, MasterService::class);
     }
 
     /**

@@ -8,4 +8,6 @@ use App\UseCase\DataCommonFormatter;
 interface IMedicalRegistrationFormRepository {
 
     public function createMedicalRegistrationForm(MedicalRegistrationForm $data): DataCommonFormatter;
+    public function getListMedicalRegistrationForm(int $page, int $pageSize, string $keyword, string $sortBy, string $sortType): DataCommonFormatter;
+    public function countAllMedicalRegistrationForm(string $keyword): int;
 }

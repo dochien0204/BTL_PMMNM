@@ -59,4 +59,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Status::class);
     }
+
+    public function medicalRegistrationForm() {
+        return $this->hasOne(MedicalRegistrationForm::class);
+    }
 }

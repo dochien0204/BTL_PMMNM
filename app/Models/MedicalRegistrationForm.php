@@ -8,6 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class MedicalRegistrationForm extends Model {
 
     use HasFactory;
-    protected $table = 'medical_registration_form';
+    protected $table = 'medical_registration_forms';
     protected $guarded = [];
+
+    public function doctor() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function patient() {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
 }

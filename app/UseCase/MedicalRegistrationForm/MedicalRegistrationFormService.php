@@ -49,8 +49,19 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
         }
 
         $medicalRegistrationForm = new MedicalRegistrationForm();
+        $medicalRegistrationForm->code = Constant::DEFAULT_CODE;
         $medicalRegistrationForm->fill($data);
         $medicalRegistrationForm->status = Status::WAITING_FOR_HEALTH_CHECK;
         return $this->medicalFormRepo->createMedicalRegistrationForm($medicalRegistrationForm);
+    }
+
+    public function getListMedicalRegistrationForm(int $page, int $pageSize, string $keyword, string $sortBy, string $sortType): DataCommonFormatter
+    {
+        return $this->medicalFormRepo->getListMedicalRegistrationForm($page, $pageSize, $keyword, $sortBy, $sortType);
+    }
+    
+    public function countAllMedicalRegistrationForm(string $keyword): int
+    {
+        return $this->medicalFormRepo->countAllMedicalRegistrationForm($keyword);
     }
 }

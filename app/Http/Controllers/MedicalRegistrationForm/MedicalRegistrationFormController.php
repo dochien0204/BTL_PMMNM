@@ -9,6 +9,7 @@ use App\Http\Payload\MedicalRegistrationForm\Payload;
 use App\Http\Presenter\Response;
 use App\UseCase\MedicalRegistrationForm\MedicalRegistrationFormUseCase;
 use App\Util\ExceptionHandler;
+use App\Util\Pagination;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Validator;
@@ -35,5 +36,26 @@ class MedicalRegistrationFormController extends Controller {
         }
 
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, null);
+    }
+
+    public function getListMedicalRegistrationForms(Request $request) {
+        $paginationParam = new Pagination($request);
+
+        $results = $this->service->getListMedicalRegistrationForm(
+            $paginationParam->getPage(),
+            $paginationParam->getPageSize(),
+            $paginationParam->getKeyWord(),
+            $paginationParam->getSortBy(),
+            $paginationParam->getSortType()
+        );
+
+        if ($results->getException() != null) {
+            return ExceptionHandler::CustomHandleException($results->getException());
+        }
+
+        $count = $this->service->countAllMedicalRegistrationForm($paginationParam->getKeyWord());
+        $paginationParam->setRecordCount($count);
+        $paginationParam->setDisplayRecord($results->getData()->count());
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Common::convertToListMedicalRegistrationFormPagination($paginationParam, $results->getData()));        
     }
 }

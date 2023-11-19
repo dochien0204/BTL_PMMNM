@@ -15,7 +15,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `medical_registration_form` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `code` bigint NOT NULL,
+  `code` varchar(255) NOT NULL,
   `patient_id` bigint,
   `day_of_examination` datetime,
   `reason` varchar(255),
