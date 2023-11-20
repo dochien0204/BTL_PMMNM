@@ -22,4 +22,8 @@ class CustomExceptionHandler
     {
         return new Exception(Message::FORBIDDEN, Response::HTTP_FORBIDDEN);
     }
+
+    public static function unauthorized() {
+        return new Exception(Message::UNAUTHORIZED, Response::HTTP_UNAUTHORIZED);
+    }
 }
