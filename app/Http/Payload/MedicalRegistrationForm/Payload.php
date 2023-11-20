@@ -19,4 +19,14 @@ class Payload {
         'dayOfExamination' => 'required',
         'reason' => 'required'
     ];
+
+    const UpdateStatusMedicalFormPayload = [
+        'id',
+        'statusCode',
+    ];
+
+    const ValidateUpdateStatusMedicalFormPayload = [
+        'id' => 'required',
+        'statusCode' => 'required'
+    ];
 }

@@ -8,7 +8,6 @@ use App\Http\Controllers\Medicine\MedicineController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
-use App\Models\MedicalRegistrationForm;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,4 +78,5 @@ Route::prefix('master')->group(function () {
 Route::prefix('medical-registration-form')->group(function () {
     Route::post('/create', [MedicalRegistrationFormController::class, 'createMedicalRegistrationForm'])->middleware('transaction');
     Route::get('/alls', [MedicalRegistrationFormController::class, 'getListMedicalRegistrationForms']);
+    Route::put('/update', [MedicalRegistrationFormController::class, 'updateStatusMedicalForm'])->middleware('transaction');
 })->middleware('verify');

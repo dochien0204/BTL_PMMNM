@@ -7,6 +7,7 @@ use App\Infrastructure\Define\Status;
 use App\Infrastructure\Repositories\Category\ICategoryRepository;
 use App\Infrastructure\Repositories\MedicalRegistrationForm\IMedicalRegistrationFormRepository;
 use App\Infrastructure\Repositories\Patient\IPatientRepository;
+use App\Infrastructure\Repositories\Status\IStatusRepository;
 use App\Infrastructure\Repositories\User\IUserRepository;
 use App\Models\MedicalRegistrationForm;
 use App\UseCase\DataCommonFormatter;
@@ -18,13 +19,15 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
     private ICategoryRepository $categoryRepo;
     private IUserRepository $userRepo;
     private IMedicalRegistrationFormRepository $medicalFormRepo;
+    private IStatusRepository $statusRepo;
 
-    public function __construct(IPatientRepository $patientRepo, ICategoryRepository $categoryRepo, IUserRepository $userRepo, IMedicalRegistrationFormRepository $medicalFormRepo)
+    public function __construct(IPatientRepository $patientRepo, ICategoryRepository $categoryRepo, IUserRepository $userRepo, IMedicalRegistrationFormRepository $medicalFormRepo, IStatusRepository $statusRepo)
     {
         $this->patientRepo = $patientRepo;
         $this->categoryRepo = $categoryRepo;
         $this->userRepo = $userRepo;
         $this->medicalFormRepo = $medicalFormRepo;
+        $this->statusRepo = $statusRepo;
     }
 
     public function createMedicalRegistrationForm(array $data): DataCommonFormatter
@@ -48,10 +51,16 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
             return new DataCommonFormatter($category->getException(), null);
         }
 
+        //Get default status medical registration form 
+        $statusDefault = $this->statusRepo->getStatusByCode(Status::WAITING_FOR_HEALTH_CHECK);
+        if ($statusDefault->getException() != null) {
+            return new DataCommonFormatter($statusDefault->getException(), null);
+        }
+
         $medicalRegistrationForm = new MedicalRegistrationForm();
         $medicalRegistrationForm->code = Constant::DEFAULT_CODE;
+        $medicalRegistrationForm->status_id = $statusDefault->getData()->id;
         $medicalRegistrationForm->fill($data);
-        $medicalRegistrationForm->status = Status::WAITING_FOR_HEALTH_CHECK;
         return $this->medicalFormRepo->createMedicalRegistrationForm($medicalRegistrationForm);
     }
 
@@ -63,5 +72,16 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
     public function countAllMedicalRegistrationForm(string $keyword): int
     {
         return $this->medicalFormRepo->countAllMedicalRegistrationForm($keyword);
+    }
+
+    public function updateStatusMedicalForm(int $id, string $statusCode): DataCommonFormatter
+    {
+        //Get master data status
+        $status = $this->statusRepo->getStatusByCode($statusCode);
+        if ($status->getException() != null) {
+            return new DataCommonFormatter($status->getException(), null);
+        }
+
+        return $this->medicalFormRepo->updateStatusMedicalForm($id, $status->getData()->id);
     }
 }

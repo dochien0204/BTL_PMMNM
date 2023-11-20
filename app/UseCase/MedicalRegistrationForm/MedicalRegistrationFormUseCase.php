@@ -9,4 +9,5 @@ interface MedicalRegistrationFormUseCase {
     public function createMedicalRegistrationForm(array $data): DataCommonFormatter;
     public function getListMedicalRegistrationForm(int $page, int $pageSize, string $keyword, string $sortBy, string $sortType): DataCommonFormatter;
     public function countAllMedicalRegistrationForm(string $keyword): int;
+    public function updateStatusMedicalForm(int $id, string $statusCode): DataCommonFormatter;
 }

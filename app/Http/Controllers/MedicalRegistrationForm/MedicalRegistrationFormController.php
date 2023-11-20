@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MedicalRegistrationForm;
 
+use App\Config\Constant;
 use App\Config\Message;
 use App\Exceptions\CustomExceptionHandler;
 use App\Http\Controllers\Controller;
@@ -9,6 +10,7 @@ use App\Http\Payload\MedicalRegistrationForm\Payload;
 use App\Http\Presenter\Response;
 use App\UseCase\MedicalRegistrationForm\MedicalRegistrationFormUseCase;
 use App\Util\ExceptionHandler;
+use App\Util\Common as UtilCommon;
 use App\Util\Pagination;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
@@ -57,5 +59,20 @@ class MedicalRegistrationFormController extends Controller {
         $paginationParam->setRecordCount($count);
         $paginationParam->setDisplayRecord($results->getData()->count());
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Common::convertToListMedicalRegistrationFormPagination($paginationParam, $results->getData()));        
+    }
+
+    public function updateStatusMedicalForm(Request $request) {
+        $payload = $request->only(Payload::UpdateStatusMedicalFormPayload);
+        $validator = Validator::make($payload, Payload::ValidateUpdateStatusMedicalFormPayload);
+        if ($validator->fails()) {
+            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
+        }
+
+        $results = $this->service->updateStatusMedicalForm($payload['id'], $payload['statusCode']);
+        if ($results->getException() != null) {
+            return ExceptionHandler::CustomHandleException($results->getException(), null);
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, null);
     }
 }

@@ -13,7 +13,7 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
     public function createMedicalRegistrationForm(MedicalRegistrationForm $data): DataCommonFormatter
     {
         try {
-            $data->save();
+           $data->save();
         } catch(Exception $exc) {
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
@@ -54,5 +54,16 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
         }
 
         return $query->count();
+    }
+
+    public function updateStatusMedicalForm(int $id, int $statusId): DataCommonFormatter
+    {
+        try {
+            MedicalRegistrationForm::where('id', $id)->update(array('status_id' => $statusId));
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, null);
     }
 }
