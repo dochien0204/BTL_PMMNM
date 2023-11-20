@@ -41,3 +41,7 @@ ALTER TABLE `medical_registration_form` ADD FOREIGN KEY (`patient_id`) REFERENCE
 ALTER TABLE `medical_registration_form` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 ALTER TABLE `medical_registration_form` ADD FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+
+ALTER TABLE `medical_registration_forms` ADD COLUMN `status_id` bigint;
+
+ALTER TABLE `medical_registration_forms` ADD FOREIGN KEY (`status_id`) REFERENCES `status`(`id`);
