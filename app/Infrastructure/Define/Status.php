@@ -8,4 +8,5 @@ class Status {
     const WAITING_FOR_HEALTH_CHECK = "Đang chờ";
     const HEALTH_CHECKING = "Đang khám";
     const COMPLETE_HEALTH_CHECK = "Hoàn thành";
+    const CANCEL_HEALTH_CHECKING = "Đã hủy";
 }
