@@ -23,7 +23,7 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
 
     public function getListMedicalRegistrationForm(int $page, int $pageSize, string $keyword, string $sortBy, string $sortType): DataCommonFormatter {
         try {
-            $query = MedicalRegistrationForm::with(['doctor', 'patient', 'category']);
+            $query = MedicalRegistrationForm::with(['doctor', 'patient', 'category', 'status']);
             $filterColumn = [];
             if (!empty($keyword) && !empty($filterColumn)) {
                 $query->where($filterColumn[0], $keyword);
