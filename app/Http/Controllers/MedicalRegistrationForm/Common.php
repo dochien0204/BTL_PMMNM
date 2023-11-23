@@ -13,6 +13,8 @@ class Common {
             $doctor = $item->doctor;
             $patient = $item->patient;
             $category = $item->category;
+            info($item);
+            $status = $item->status;
             return [
                 'id' => $item->id,
                 'code' => $item->code,
@@ -43,6 +45,12 @@ class Common {
                     'type' => $category->type,
                     'description' => $category->description,
                 ],
+                'status' => [
+                    'id' => $status->id,
+                    'code' => $status->code,
+                    'type' => $status->type,
+                    'description' => $status->description,
+                ]
             ];
         });
 
