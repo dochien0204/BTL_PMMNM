@@ -15,6 +15,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
+        \Illuminate\Session\Middleware\StartSession::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -66,6 +67,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'transaction' => \App\Http\Middleware\TransactionMiddleware::class,
         'permission' => \App\Http\Middleware\PermissionAllowMiddleware::class,
-        'verify' => \App\Http\Middleware\VerifyCsrfToken::class,
+        'verify' => \App\Http\Middleware\VerifyMiddleware::class,
     ];
 }

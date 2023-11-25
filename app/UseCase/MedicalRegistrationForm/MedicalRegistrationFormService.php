@@ -114,4 +114,14 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
         
         return $this->medicalFormRepo->updateMedicalRegistrationForm($medicalFormEntity);
     }
+
+    public function getListMedicalFormOfDoctor(int $userId, int $page, int $size, string $keyword, string $sortBy, string $sortType): DataCommonFormatter
+    {
+        return $this->medicalFormRepo->getMedicalFormByDoctor($userId, $page, $size, $keyword, $sortBy, $sortType);
+    }
+
+    public function countAllMedicalFormOfDoctor(int $userId, string $keyword): int
+    {
+        return $this->medicalFormRepo->countAllMedicalRegistrationFormOfDoctor($userId, $keyword);
+    }
 }

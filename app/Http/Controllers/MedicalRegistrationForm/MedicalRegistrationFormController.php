@@ -90,4 +90,25 @@ class MedicalRegistrationFormController extends Controller {
 
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, null);
     }
+
+    public function getListMedicalFormOfDoctor(Request $request) {
+        $userId = auth()->user()->id;
+
+        $paginationParam = new Pagination($request);
+        
+        $results = $this->service->getListMedicalFormOfDoctor($userId,
+        $paginationParam->getPage(),
+        $paginationParam->getPageSize(),
+        $paginationParam->getKeyWord(),
+        $paginationParam->getSortBy(),
+        $paginationParam->getSortType());
+        if ($results->getException() != null) {
+            return ExceptionHandler::CustomHandleException($results->getException());
+        }
+
+        $count = $this->service->countAllMedicalFormOfDoctor($userId, $paginationParam->getKeyWord());
+        $paginationParam->setRecordCount($count);
+        $paginationParam->setDisplayRecord($paginationParam->getPageSize());
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Common::convertToListMedicalRegistrationFormPagination($paginationParam, $results->getData()));
+    }
 }

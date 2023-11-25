@@ -67,6 +67,8 @@ class Common {
         ];
     }
 
+    
+
     public static function convertUserToPresenter(User $data) {
         return [
             'id' => $data->id,
@@ -77,4 +79,6 @@ class Common {
             'role' => $data->role
         ];
     }
+
+    
 }
