@@ -90,4 +90,47 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
 
         return new DataCommonFormatter(null, $query);
     }
+
+    public function getMedicalFormByDoctor(int $userId, int $page, int $size, string $keyword, string $sortBy, string $sortType): DataCommonFormatter {
+        try {
+            $query = MedicalRegistrationForm::with(['doctor', 'patient', 'category', 'status']);
+            $filterColumn = [];
+            if (!empty($keyword) && !empty($filterColumn)) {
+                $query->where($filterColumn[0], $keyword);
+            }
+            $filterColumn = [];
+            if (!empty($keyword) && !empty($filterColumn)) {
+                $query->where($filterColumn[0], $keyword);
+            }
+            $query->where("user_id", "=", $userId);
+            $query->orderBy($sortBy, $sortType);
+            $offset = Pagination::calculateOffset($page, $size);
+            $query->offset($offset);
+            $query->limit($size);
+
+        } catch(Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $query->get());
+    }
+
+    public function countAllMedicalRegistrationFormOfDoctor(int $userId, string $keyword): int {
+        try {
+            $query = MedicalRegistrationForm::query();
+            $filterColumn = [];
+            if (!empty($keyword) && !empty($filterColumn)) {
+                $query->where($filterColumn[0], $keyword);
+            }
+            $filterColumn = [];
+            if (!empty($keyword) && !empty($filterColumn)) {
+                $query->where($filterColumn[0], $keyword);
+            }
+            $query->where("user_id", "=", $userId);
+        } catch(Exception $e) {
+            throw new Exception($e);
+        }
+
+        return $query->count();
+    }
 }

@@ -13,4 +13,6 @@ interface IMedicalRegistrationFormRepository {
     public function updateStatusMedicalForm(int $id, int $statusId): DataCommonFormatter;
     public function updateMedicalRegistrationForm(MedicalRegistrationForm $data): DataCommonFormatter;
     public function getMedicalFormById(int $id): DataCommonFormatter;
+    public function getMedicalFormByDoctor(int $userId, int $page, int $size, string $keyword, string $sortBy, string $sortType): DataCommonFormatter;
+    public function countAllMedicalRegistrationFormOfDoctor(int $userId, string $keyword): int;
 }
