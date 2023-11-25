@@ -78,5 +78,6 @@ Route::prefix('master')->group(function () {
 Route::prefix('medical-registration-form')->group(function () {
     Route::post('/create', [MedicalRegistrationFormController::class, 'createMedicalRegistrationForm'])->middleware('transaction');
     Route::get('/alls', [MedicalRegistrationFormController::class, 'getListMedicalRegistrationForms']);
-    Route::put('/update', [MedicalRegistrationFormController::class, 'updateStatusMedicalForm'])->middleware('transaction');
+    Route::put('/update-status', [MedicalRegistrationFormController::class, 'updateStatusMedicalForm'])->middleware('transaction');
+    Route::put('/update', [MedicalRegistrationFormController::class, 'updateMedicalResgistrationForm'])->middleware('transaction');
 })->middleware('verify');
