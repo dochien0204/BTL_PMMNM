@@ -29,4 +29,20 @@ class Payload {
         'id' => 'required',
         'statusCode' => 'required'
     ];
+
+    const UpdateMedicalResgistrationForm = [
+        'id',
+        'dayOfExamination',
+        'categoryId',
+        'userId',
+        'reason'
+    ];
+
+    const ValidateUpdateMedicalResgistrationForm = [
+        'id' => 'required',
+        'dayOfExamination' => 'required',
+        'categoryId' => 'required',
+        'userId' => 'required',
+        "reason" => 'required'
+    ];
 }

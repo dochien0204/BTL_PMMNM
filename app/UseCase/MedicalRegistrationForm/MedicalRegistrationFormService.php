@@ -3,6 +3,7 @@
 namespace App\UseCase\MedicalRegistrationForm;
 
 use App\Config\Constant;
+use App\Exceptions\CustomExceptionHandler;
 use App\Infrastructure\Define\Status;
 use App\Infrastructure\Repositories\Category\ICategoryRepository;
 use App\Infrastructure\Repositories\MedicalRegistrationForm\IMedicalRegistrationFormRepository;
@@ -83,5 +84,34 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
         }
 
         return $this->medicalFormRepo->updateStatusMedicalForm($id, $status->getData()->id);
+    }
+
+    public function updateMedicalRegistrationForm(array $data): DataCommonFormatter {
+        $medicalForm = $this->medicalFormRepo->getMedicalFormById($data['id']);
+        if ($medicalForm->getException() != null) {
+            return new DataCommonFormatter($medicalForm->getException(), null);
+        }
+
+        $statusWaiting = $this->statusRepo->getStatusByCode(Status::WAITING_FOR_HEALTH_CHECK);
+        if ($statusWaiting->getException() != null) {
+            return new DataCommonFormatter($statusWaiting->getException(), null);
+        }
+
+        $statusChecking = $this->statusRepo->getStatusByCode(Status::HEALTH_CHECKING);
+        if ($statusChecking->getException() != null) {
+            return new DataCommonFormatter($statusChecking->getException(), null);
+        }
+
+        if ($medicalForm->getData()->status_id != $statusWaiting->getData()->id && $medicalForm->getData()->status_id != $statusChecking->getData()->id) {
+            return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+        }
+
+        $medicalFormEntity = $medicalForm->getData();
+        $medicalFormEntity->day_of_examination = $data['day_of_examination'];
+        $medicalFormEntity->category_id = $data['category_id'];
+        $medicalFormEntity->user_id = $data['user_id'];
+        $medicalFormEntity->reason = $data['reason'];
+        
+        return $this->medicalFormRepo->updateMedicalRegistrationForm($medicalFormEntity);
     }
 }

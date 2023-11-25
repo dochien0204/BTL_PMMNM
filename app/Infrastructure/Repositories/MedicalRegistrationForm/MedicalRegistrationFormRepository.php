@@ -66,4 +66,28 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
 
         return new DataCommonFormatter(null, null);
     }
+
+    public function updateMedicalRegistrationForm(MedicalRegistrationForm $data): DataCommonFormatter {
+        try {
+            $data->save();
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $data);
+    }
+
+    public function getMedicalFormById(int $id): DataCommonFormatter
+    {
+        try {
+            $query = MedicalRegistrationForm::find($id);
+            if ($query == null) {
+                return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+            }
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $query);
+    }
 }

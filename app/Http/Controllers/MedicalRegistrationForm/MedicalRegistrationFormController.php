@@ -75,4 +75,19 @@ class MedicalRegistrationFormController extends Controller {
 
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, null);
     }
+
+    public function updateMedicalResgistrationForm(Request $request) {
+        $payload = $request->only(Payload::UpdateMedicalResgistrationForm);
+        $validator = Validator::make($payload, Payload::UpdateStatusMedicalFormPayload);
+        if ($validator->fails()) {
+            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
+        }
+
+        $results = $this->service->updateMedicalRegistrationForm(UtilCommon::convertKeysToCase(Constant::SNAKE_CASE, $payload));
+        if ($results->getException() != null) {
+            return ExceptionHandler::CustomHandleException($results->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, null);
+    }
 }
