@@ -133,4 +133,17 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
 
         return $query->count();
     }
+
+    public function getListMedicalFormOfPatient(int $patientId, int $statusId): DataCommonFormatter {
+        try {
+            $query = MedicalRegistrationForm::with(['doctor', 'patient', 'category', 'status']);
+            $query->where("patient_id", "=", $patientId);
+            $query->where("status_id", "=", $statusId);
+            $query->orderBy("created_at", "DESC");
+        } catch(Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $query->get());
+    }
 }

@@ -81,4 +81,5 @@ Route::prefix('medical-registration-form')->middleware('verify')->group(function
     Route::put('/update-status', [MedicalRegistrationFormController::class, 'updateStatusMedicalForm'])->middleware('transaction');
     Route::put('/update', [MedicalRegistrationFormController::class, 'updateMedicalResgistrationForm'])->middleware(['transaction', 'permission:le_tan']);
     Route::get("/list/doctor", [MedicalRegistrationFormController::class, 'getListMedicalFormOfDoctor'])->middleware('permission:bac_si');
+    Route::get("/list/patient", [MedicalRegistrationFormController::class, 'getListMedicalFormCompleteOfPatient'])->middleware('permission:bac_si,le_tan');
 });

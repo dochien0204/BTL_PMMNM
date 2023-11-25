@@ -111,4 +111,19 @@ class MedicalRegistrationFormController extends Controller {
         $paginationParam->setDisplayRecord($paginationParam->getPageSize());
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Common::convertToListMedicalRegistrationFormPagination($paginationParam, $results->getData()));
     }
+
+    public function getListMedicalFormCompleteOfPatient(Request $request) {
+        $patientId = $request->query("patientId");
+        $patientIdInt = intval($patientId);
+        if ($patientIdInt == 0) {
+            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
+        }
+
+        $results = $this->service->getListMedicalFormCompleteOfPatient($patientIdInt);
+        if ($results->getException() != null) {
+            return ExceptionHandler::CustomHandleException($results->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Common::convertToListMedicalRegistrationForm($results->getData()));
+    }
 }

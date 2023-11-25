@@ -67,6 +67,57 @@ class Common {
         ];
     }
 
+    public static function convertToListMedicalRegistrationForm(Collection $listData) {
+        $listDataConvert = $listData->map(function($item) {
+            $doctor = $item->doctor;
+            $patient = $item->patient;
+            $category = $item->category;
+            info($item);
+            $status = $item->status;
+            return [
+                'id' => $item->id,
+                'code' => $item->code,
+                'dayOfExamination' => $item->day_of_examination,
+                'reason' => $item->reason,
+                'doctor' => [
+                    'id' => $doctor->id,
+                    'name' => $doctor->name,
+                    'phoneNumber' => $doctor->phone_number,
+                    'address' => $doctor->address,
+                    'email' => $doctor->email,
+                    'role' => $doctor->role
+                ],
+                'patient' => [
+                    'id' => $patient->id,
+                    'patientGroup' => $patient->patient_group,
+                    'name' => $patient->name,
+                    'gender' => $patient->gender,
+                    'birthday' => $patient->birthday,
+                    'phoneNumber' => $patient->phone_number,
+                    'address' => $patient->address,
+                    'insuranceNumber'=> $patient->insurance_number
+                ],
+                'category' => [
+                    'id' => $category->id,
+                    'code' => $category->code,
+                    'name' => $category->name,
+                    'type' => $category->type,
+                    'description' => $category->description,
+                ],
+                'status' => [
+                    'id' => $status->id,
+                    'code' => $status->code,
+                    'type' => $status->type,
+                    'description' => $status->description,
+                ]
+            ];
+        });
+
+        return [
+            'results' => $listDataConvert,
+        ];
+    }
+
     
 
     public static function convertUserToPresenter(User $data) {
