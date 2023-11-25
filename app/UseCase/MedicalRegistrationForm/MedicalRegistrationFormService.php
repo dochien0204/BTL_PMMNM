@@ -124,4 +124,19 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
     {
         return $this->medicalFormRepo->countAllMedicalRegistrationFormOfDoctor($userId, $keyword);
     }
+
+    public function getListMedicalFormCompleteOfPatient(int $patientId): DataCommonFormatter
+    {
+        $statusComplete = $this->statusRepo->getStatusByCode(Status::COMPLETE_HEALTH_CHECK);
+        if ($statusComplete->getException() != null) {
+            return new DataCommonFormatter($statusComplete->getException(), null);
+        }
+
+        $results = $this->medicalFormRepo->getListMedicalFormOfPatient($patientId, $statusComplete->getData()->id);
+        if ($results->getException() != null) {
+            return new DataCommonFormatter($results->getException(), null);
+        }
+
+        return new DataCommonFormatter(null, $results->getData());
+    }
 }
