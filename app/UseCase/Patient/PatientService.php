@@ -25,6 +25,11 @@ class PatientService implements PatientUseCase
         return $this->patientRepo->countAllPatients($keyword);
     }
 
+    public function countPatients(string $keyword): int
+    {
+        return $this->patientRepo->countPatients($keyword);
+    }
+
     public function getPatientById(int $id): DataCommonFormatter
     {
         return $this->patientRepo->getPatientById($id);
@@ -55,5 +60,10 @@ class PatientService implements PatientUseCase
         $patientUpdate->insurance_number = $data['insurance_number'];
 
         return $this->patientRepo->updatePatient($patientUpdate);
+    }
+
+    public function searchPatients(string $keyword, int $page, int $size, string $sortBy, string $sortType): DataCommonFormatter
+    {
+        return $this->patientRepo->searchPatients($keyword, $page, $size, $sortBy, $sortType);
     }
 }

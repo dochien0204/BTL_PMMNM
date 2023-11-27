@@ -45,6 +45,22 @@ class PatientRepository implements IPatientRepository
         return $query->count();
     }
 
+    public function countPatients(string $keyword): int
+    {
+        try {
+            $query = Patient::query();
+            $filterColumn = ['name'];
+            if (! empty($keyword) && ! empty($filterColumn)) {
+                $query->where($filterColumn[0], 'like', '%'.$keyword.'%');
+            }
+
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+
+        return $query->count();
+    }
+
     public function getPatientById(int $id): DataCommonFormatter
     {
         try {
@@ -93,5 +109,36 @@ class PatientRepository implements IPatientRepository
         } catch (Exception $exc) {
             return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
         }
+    }
+
+    public function searchPatients(string $keyword, int $page, int $size, string $sortBy, string $sortType): DataCommonFormatter
+    {
+        try {
+            $query = Patient::query();
+            $filterColumn = ['name'];
+            if (! empty($keyword) && ! empty($filterColumn)) {
+                $query->where($filterColumn[0], 'like', '%'.$keyword.'%');
+            }
+
+            $query->orderBy($sortBy, $sortType);
+            $offset = Pagination::calculateOffset($page, $size);
+            $query->offset($offset);
+            $query->limit($size);
+
+            return new DataCommonFormatter(null, $query->get());
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+    }
+
+    public function updatePatient(Patient $data): DataCommonFormatter
+    {
+        try {
+            $data->save();
+        } catch(Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $data);
     }
 }

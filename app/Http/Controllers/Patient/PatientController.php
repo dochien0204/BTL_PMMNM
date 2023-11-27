@@ -96,4 +96,42 @@ class PatientController extends Controller
 
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $result->getData());
     }
+
+    public function searchPatients(Request $request)
+    {
+        $paginationParams = new Pagination($request);
+
+        $patients = $this->service->searchPatients(
+            $paginationParams->getKeyWord(),
+            $paginationParams->getPage(),
+            $paginationParams->getPageSize(),
+            $paginationParams->getSortBy(),
+            $paginationParams->getSortType()
+        );
+
+        if ($patients->getException() != null) {
+            return ExceptionHandler::CustomHandleException($patients->getException());
+        }
+
+        $count = $this->service->countPatients($paginationParams->getKeyWord());
+        $paginationParams->setRecordCount($count);
+        $paginationParams->setDisplayRecord($patients->getData()->count());
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Common::convertToListPatientPagination($paginationParams, $patients->getData()));
+    }
+
+    public function updatePatient(Request $request) {
+        $payload = $request->only(Payload::UpdatePatientPayload);
+        $validator = Validator::make($payload, Payload::ValidateUpdatePatientPayload);
+        if ($validator->fails()) {
+            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
+        }
+
+        $results = $this->service->updatePatient(UtilCommon::convertKeysToCase(Constant::SNAKE_CASE, $payload));
+        if ($results->getException() != null) {
+            return ExceptionHandler::CustomHandleException($results->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $results->getData());
+    }
 }

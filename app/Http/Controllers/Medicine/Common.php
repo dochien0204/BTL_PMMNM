@@ -27,12 +27,13 @@ class Common
                 'name' => $item->name,
                 'code' => $item->code,
                 'expiredDate' => $item->expired_date,
-                'manufacturedDate' => $item->manufactured_datem,
+                'manufacturedDate' => $item->manufactured_date,
                 'publisher' => $item->publisher,
                 'instruction' => $item->instruction,
                 'ingredient' => $item->ingredient,
+                'quantity' => $item->quantity,
                 'unit' => $item->unit,
-                'price' => $item->double,
+                'price' => $item->price,
             ];
         });
 

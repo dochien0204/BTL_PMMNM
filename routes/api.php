@@ -52,8 +52,10 @@ Route::prefix('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
-Route::prefix('patient')->middleware('verify')->group(function () {
+// Patient
+Route::prefix('patient')->group(function () {
     Route::get('/alls', [PatientController::class, 'getAllPatient'])->middleware('permission:admin_sys,le_tan');
+    Route::get('/search', [PatientController::class, 'searchPatients'])->middleware('permission:admin_sys,le_tan');
     Route::get('/detail', [PatientController::class, 'getPatientById']);
     Route::post('/create', [PatientController::class, 'createNewPatient'])->middleware(['transaction', 'permission:admin_sys,le_tan']);
     Route::delete('/delete', [PatientController::class, 'deletePatientById'])->middleware(['transaction', 'permission:admin_sys,le_tan']);
@@ -61,7 +63,7 @@ Route::prefix('patient')->middleware('verify')->group(function () {
 });
 
 //Medicine
-Route::prefix('medicine')->middleware('verify')->group(function () {
+Route::prefix('medicine')->group(function () {
     Route::get('/alls', [MedicineController::class, 'getAllMedicines']);
     Route::get('/detail', [MedicineController::class, 'getMedicineById']);
     Route::post('/create', [MedicineController::class, 'createNewMedicine'])->middleware('transaction');
@@ -70,13 +72,13 @@ Route::prefix('medicine')->middleware('verify')->group(function () {
 });
 
 //Master data
-Route::prefix('master')->middleware('verify')->group(function () {
+Route::prefix('master')->group(function () {
     Route::get('/category', [CategoryController::class, 'getAllCategoryByType']);
     Route::get('/status', [MasterController::class, 'getAllStatusByType']);
 });
 
 //Medical Registration Form
-Route::prefix('medical-registration-form')->middleware('verify')->group(function () {
+Route::prefix('medical-registration-form')->group(function () {
     Route::post('/create', [MedicalRegistrationFormController::class, 'createMedicalRegistrationForm'])->middleware('transaction');
     Route::get('/alls', [MedicalRegistrationFormController::class, 'getListMedicalRegistrationForms']);
     Route::put('/update-status', [MedicalRegistrationFormController::class, 'updateStatusMedicalForm'])->middleware('transaction');
