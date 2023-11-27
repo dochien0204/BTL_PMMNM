@@ -6,8 +6,8 @@ use App\Infrastructure\Repositories\Medicine\IMedicineRepository;
 use App\Models\Medicine;
 use App\UseCase\DataCommonFormatter;
 
-class MedicineService implements MedicineUseCase {
-
+class MedicineService implements MedicineUseCase
+{
     private IMedicineRepository $medicineRepo;
 
     public function __construct(IMedicineRepository $medicineRepo)
@@ -40,7 +40,8 @@ class MedicineService implements MedicineUseCase {
         return $this->medicineRepo->deleteMedicineById($id);
     }
 
-    public function updateMedicine(array $data): DataCommonFormatter {
+    public function updateMedicine(array $data): DataCommonFormatter
+    {
 
         $medicineUpdate = $this->medicineRepo->getMedicineById($data['id']);
         if ($medicineUpdate->getException() != null) {
@@ -58,5 +59,4 @@ class MedicineService implements MedicineUseCase {
 
         return $this->medicineRepo->updateMedicine($medicineEntity);
     }
-
 }

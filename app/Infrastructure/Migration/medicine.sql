@@ -9,6 +9,7 @@ CREATE TABLE `medicine` (
   `ingredient` varchar(255),
   `unit` varchar(255),
   `price` double,
+  `quantity` integer,
   `created_at` timestamp DEFAULT (now()),
   `updated_at` timestamp DEFAULT (now())
 );

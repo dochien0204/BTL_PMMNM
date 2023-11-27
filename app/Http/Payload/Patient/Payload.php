@@ -2,15 +2,15 @@
 
 namespace App\Http\Payload\Patient;
 
-class Payload {
-
+class Payload
+{
     const PatientPayload = [
         'name',
         'gender',
         'birthday',
         'phoneNumber',
         'address',
-        'insuranceNumber'
+        'insuranceNumber',
     ];
 
     const ValidatePatientPayload = [

@@ -4,11 +4,11 @@ namespace App\Util;
 
 use Illuminate\Support\Str;
 
-class Common {
-
+class Common
+{
     public static function convertKeysToCase(string $case, $data)
     {
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             return $data;
         }
 

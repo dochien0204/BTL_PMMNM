@@ -32,7 +32,7 @@ class AuthController extends Controller
     {
         try {
             $token = $this->userService->attempt($request->validated());
-            if (!$token) {
+            if (! $token) {
                 return PresenterResponse::responseError(Response::$statusTexts[Response::HTTP_UNAUTHORIZED], Response::HTTP_UNAUTHORIZED);
             }
 
@@ -67,7 +67,7 @@ class AuthController extends Controller
                 $data
             );
         } else {
-            return PresenterResponse::responseError("Retrieving information failed because you are not logged in!", Response::HTTP_UNAUTHORIZED);
+            return PresenterResponse::responseError('Retrieving information failed because you are not logged in!', Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -91,7 +91,7 @@ class AuthController extends Controller
             $email = $request->input('email');
             $token = Str::random(60);
             $this->userService->updateOrInsertPasswordReset($email, $token);
-            $resetUrl = env('APP_FRONT_URL') . 'auth/reset-password/' . $token;
+            $resetUrl = env('APP_FRONT_URL').'auth/reset-password/'.$token;
             dispatch(new SendResetPasswordJob($email, $resetUrl));
 
             return PresenterResponse::responseDoesNotData(
@@ -111,7 +111,7 @@ class AuthController extends Controller
             $token = $request->token;
             $passwordResetRecord = $this->userService->getPasswordResetByToken($token);
 
-            if (!$passwordResetRecord) {
+            if (! $passwordResetRecord) {
                 return PresenterResponse::responseDoesNotData(Response::HTTP_NOT_FOUND, 'Invalid token, please try it again');
             }
 
@@ -143,7 +143,7 @@ class AuthController extends Controller
 
             $user = $this->userService->findByEmail($email);
 
-            if (!$user) {
+            if (! $user) {
                 return PresenterResponse::responseDoesNotData(Response::HTTP_NOT_FOUND, 'User not found');
             }
 
@@ -155,7 +155,7 @@ class AuthController extends Controller
                 $userId = $user->id;
             }
 
-            $resetUrl = env('APP_FRONT_URL') . 'verify-account/' . $userId . '/' . $token;
+            $resetUrl = env('APP_FRONT_URL').'verify-account/'.$userId.'/'.$token;
 
             dispatch(new VerificationAccountJob($email, $resetUrl));
 

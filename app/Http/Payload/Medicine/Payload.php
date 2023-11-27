@@ -2,8 +2,8 @@
 
 namespace App\Http\Payload\Medicine;
 
-class Payload {
-
+class Payload
+{
     const MedicinePayload = [
         'name',
         'code',
@@ -14,7 +14,7 @@ class Payload {
         'ingredient',
         'unit',
         'quantity',
-        'price'
+        'price',
     ];
 
     const ValidateMedicinePayload = [
@@ -27,7 +27,7 @@ class Payload {
         'ingredient' => 'required',
         'unit' => 'required',
         'quantity' => 'required',
-        'price' => 'required'
+        'price' => 'required',
     ];
 
     const UpdateMedicine = [
@@ -38,7 +38,7 @@ class Payload {
         'ingredient',
         'unit',
         'quantity',
-        'price'
+        'price',
     ];
 
     const ValidatUpdateMedicinePayload = [
@@ -49,6 +49,6 @@ class Payload {
         'ingredient' => 'required',
         'unit' => 'required',
         'quantity' => 'required',
-        'price' => 'required'
+        'price' => 'required',
     ];
 }
