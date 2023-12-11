@@ -91,4 +91,5 @@ Route::prefix('medical-registration-form')->group(function () {
 //Fee
 Route::prefix('fee')->group(function () {
     Route::post('/test-result/create', [TestResultController::class, 'createTestResult'])->middleware('transaction');
+    Route::post('/test-result/update-status-payment', [TestResultController::class, 'changeStatusPaymentFormToPaid'])->middleware('transaction');
 });

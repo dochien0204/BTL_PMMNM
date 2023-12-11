@@ -19,4 +19,12 @@ class Payload
         'preliminaryExamination' => 'required',
         'diagnostic' => 'required',
     ];
+
+    const ChangeStatusPaymentFormToPaidPayload = [
+        'medicalRegistrationFormId',
+    ];
+
+    const ValidateChangeStatusPaymentFormToPaidPayload = [
+        'medicalRegistrationFormId' => 'required',
+    ];
 }
