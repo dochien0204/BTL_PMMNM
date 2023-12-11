@@ -7,7 +7,6 @@ use App\Http\Controllers\MedicalRegistrationForm\MedicalRegistrationFormControll
 use App\Http\Controllers\Medicine\MedicineController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Product\ProductController;
-use App\Http\Controllers\TestResult\TestResultController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -86,9 +85,4 @@ Route::prefix('medical-registration-form')->group(function () {
     Route::put('/update', [MedicalRegistrationFormController::class, 'updateMedicalResgistrationForm'])->middleware(['transaction', 'permission:le_tan']);
     Route::get("/list/doctor", [MedicalRegistrationFormController::class, 'getListMedicalFormOfDoctor'])->middleware('permission:bac_si');
     Route::get("/list/patient", [MedicalRegistrationFormController::class, 'getListMedicalFormCompleteOfPatient'])->middleware('permission:bac_si,le_tan');
-});
-
-//Fee
-Route::prefix('fee')->group(function () {
-    Route::post('/test-result/create', [TestResultController::class, 'createTestResult'])->middleware('transaction');
 });
