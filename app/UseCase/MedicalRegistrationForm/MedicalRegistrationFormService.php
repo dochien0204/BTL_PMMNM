@@ -4,12 +4,15 @@ namespace App\UseCase\MedicalRegistrationForm;
 
 use App\Config\Constant;
 use App\Exceptions\CustomExceptionHandler;
+use App\Infrastructure\Define\Category;
 use App\Infrastructure\Define\Status;
 use App\Infrastructure\Repositories\Category\ICategoryRepository;
+use App\Infrastructure\Repositories\Fee\IFeeRepository;
 use App\Infrastructure\Repositories\MedicalRegistrationForm\IMedicalRegistrationFormRepository;
 use App\Infrastructure\Repositories\Patient\IPatientRepository;
 use App\Infrastructure\Repositories\Status\IStatusRepository;
 use App\Infrastructure\Repositories\User\IUserRepository;
+use App\Models\Fee;
 use App\Models\MedicalRegistrationForm;
 use App\UseCase\DataCommonFormatter;
 use App\Util\Common;
@@ -21,14 +24,16 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
     private IUserRepository $userRepo;
     private IMedicalRegistrationFormRepository $medicalFormRepo;
     private IStatusRepository $statusRepo;
+    private IFeeRepository $feeRepo;
 
-    public function __construct(IPatientRepository $patientRepo, ICategoryRepository $categoryRepo, IUserRepository $userRepo, IMedicalRegistrationFormRepository $medicalFormRepo, IStatusRepository $statusRepo)
+    public function __construct(IPatientRepository $patientRepo, ICategoryRepository $categoryRepo, IUserRepository $userRepo, IMedicalRegistrationFormRepository $medicalFormRepo, IStatusRepository $statusRepo, IFeeRepository $feeRepo)
     {
         $this->patientRepo = $patientRepo;
         $this->categoryRepo = $categoryRepo;
         $this->userRepo = $userRepo;
         $this->medicalFormRepo = $medicalFormRepo;
         $this->statusRepo = $statusRepo;
+        $this->feeRepo = $feeRepo;
     }
 
     public function createMedicalRegistrationForm(array $data): DataCommonFormatter
@@ -62,7 +67,20 @@ class MedicalRegistrationFormService implements MedicalRegistrationFormUseCase {
         $medicalRegistrationForm->code = Constant::DEFAULT_CODE;
         $medicalRegistrationForm->status_id = $statusDefault->getData()->id;
         $medicalRegistrationForm->fill($data);
-        return $this->medicalFormRepo->createMedicalRegistrationForm($medicalRegistrationForm);
+
+        $result = $this->medicalFormRepo->createMedicalRegistrationForm($medicalRegistrationForm);
+        if ($result->getException() != null) {
+            return new DataCommonFormatter($result->getException(), null);
+        }
+
+        //Create fee
+        $statusUnpaid = $this->statusRepo->getStatusByCode(Status::UNPAID);
+        $fee = new Fee();
+        $fee->medical_registration_form_id = $result->getData()->id;
+        $fee->status_id = $statusUnpaid->getData()->id;
+        $fee->type = Category::TEST_RESULT;
+
+        return $this->feeRepo->createFee($fee);
     }
 
     public function getListMedicalRegistrationForm(int $page, int $pageSize, string $keyword, string $sortBy, string $sortType): DataCommonFormatter
