@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Infrastructure\Repositories\Category\CategoryRepository;
 use App\Infrastructure\Repositories\Category\ICategoryRepository;
+use App\Infrastructure\Repositories\Fee\FeeRepository;
+use App\Infrastructure\Repositories\Fee\IFeeRepository;
 use App\Infrastructure\Repositories\MedicalRegistrationForm\IMedicalRegistrationFormRepository;
 use App\Infrastructure\Repositories\MedicalRegistrationForm\MedicalRegistrationFormRepository;
 use App\Infrastructure\Repositories\Medicine\IMedicineRepository;
@@ -12,10 +14,14 @@ use App\Infrastructure\Repositories\PasswordResetToken\IPasswordResetTokenReposi
 use App\Infrastructure\Repositories\PasswordResetToken\PasswordResetTokenRepository;
 use App\Infrastructure\Repositories\Patient\IPatientRepository;
 use App\Infrastructure\Repositories\Patient\PatientRepository;
+use App\Infrastructure\Repositories\Prescription\IPrescriptionRepository;
+use App\Infrastructure\Repositories\Prescription\PrescriptionRepository;
 use App\Infrastructure\Repositories\Product\IProductRepository;
 use App\Infrastructure\Repositories\Product\ProductRepository;
 use App\Infrastructure\Repositories\Status\IStatusRepository;
 use App\Infrastructure\Repositories\Status\StatusRepository;
+use App\Infrastructure\Repositories\TestResult\ITestResultRepository;
+use App\Infrastructure\Repositories\TestResult\TestResultRepository;
 use App\Infrastructure\Repositories\User\IUserRepository;
 use App\Infrastructure\Repositories\User\UserRepository;
 use App\UseCase\Category\CategoryService;
@@ -30,6 +36,8 @@ use App\UseCase\Patient\PatientService;
 use App\UseCase\Patient\PatientUseCase;
 use App\UseCase\Product\ProductService;
 use App\UseCase\Product\ProductUseCase;
+use App\UseCase\TestResult\TestResultService;
+use App\UseCase\TestResult\TestResultUseCase;
 use App\UseCase\User\UserService;
 use App\UseCase\User\UserUseCase;
 use Illuminate\Support\ServiceProvider;
@@ -70,6 +78,16 @@ class AppServiceProvider extends ServiceProvider
         //Master data
         $this->app->bind(IStatusRepository::class, StatusRepository::class);
         $this->app->bind(MasterUseCase::class, MasterService::class);
+
+        //Fee
+        $this->app->bind(IFeeRepository::class, FeeRepository::class);
+
+        //Prescription
+        $this->app->bind(IPrescriptionRepository::class, PrescriptionRepository::class);
+
+        //Test Result
+        $this->app->bind(ITestResultRepository::class, TestResultRepository::class);
+        $this->app->bind(TestResultUseCase::class, TestResultService::class);
     }
 
     /**
