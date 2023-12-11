@@ -39,4 +39,19 @@ class TestResultController extends Controller {
 
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, null);
     }
+
+    public function changeStatusPaymentFormToPaid(Request $request) {
+        $payload = $request->only(Payload::ChangeStatusPaymentFormToPaidPayload);
+        $validator = Validator::make($payload, Payload::ValidateChangeStatusPaymentFormToPaidPayload);
+        if ($validator->fails()) {
+            return ExceptionHandler::CustomHandleException(CustomExceptionHandler::badRequest());
+        }
+
+        $result = $this->service->changeStatusPaymentMedicalFormToPaid(UtilCommon::convertKeysToCase(Constant::SNAKE_CASE, $payload)['medical_registration_form_id']);
+        if ($result->getException() != null) {
+            return ExceptionHandler::CustomHandleException($result->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, null);
+    }
 }

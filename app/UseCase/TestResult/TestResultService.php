@@ -49,4 +49,23 @@ class TestResultService implements TestResultUseCase {
         $testResult->fee_id = $feeId;
         return $this->testResultRepo->createTestResult($testResult);
     }
+
+    public function changeStatusPaymentMedicalFormToPaid(int $medicalFormId): DataCommonFormatter {
+        $medicalForm = $this->medicalFormRepo->getMedicalFormById($medicalFormId);
+        if ($medicalForm->getException() != null) {
+            return new DataCommonFormatter($medicalForm->getException(), null);
+        }
+
+        //Status paid
+        $statusPaid = $this->statusRepo->getStatusByCode(Status::PAID);
+        if ($statusPaid->getException() != null) {
+            return new DataCommonFormatter($statusPaid->getException(), null);
+        }
+
+        $feeTestResult = $this->feeRepo->getFeeMedicalFormByType($medicalFormId, Category::TEST_RESULT);
+        if ($feeTestResult->getException() != null) {
+            return new DataCommonFormatter($feeTestResult->getException(), null);
+        }
+        return $this->feeRepo->changeStatusFee($feeTestResult->getData()->id, $statusPaid->getData()->id);
+    }
 }
