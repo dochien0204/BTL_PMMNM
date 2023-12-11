@@ -13,4 +13,8 @@ class Status extends Model
     const STATUS_INACTIVE = 2;
 
     const STATUS_ACTIVE = 1;
+
+    public function fees() {
+        return $this->hasMany(Fee::class);
+    }
 }
