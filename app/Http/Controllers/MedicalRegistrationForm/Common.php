@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MedicalRegistrationForm;
 
+use App\Infrastructure\Define\Category;
 use App\Models\User;
 use App\Util\Pagination;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,8 +14,15 @@ class Common {
             $doctor = $item->doctor;
             $patient = $item->patient;
             $category = $item->category;
+            $fees = $item->fees;
             info($item);
             $status = $item->status;
+            $statusPayment = null;
+            foreach($fees as $fee) {
+                if ($fee->type == Category::TEST_RESULT) {
+                    $statusPayment = $fee->status->name;
+                }
+            }
             return [
                 'id' => $item->id,
                 'code' => $item->code,
@@ -51,7 +59,8 @@ class Common {
                     'code' => $status->code,
                     'type' => $status->type,
                     'description' => $status->description,
-                ]
+                ],
+                'statusPayment' => $statusPayment,
             ];
         });
 

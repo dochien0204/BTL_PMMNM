@@ -26,4 +26,8 @@ class MedicalRegistrationForm extends Model
     public function status() {
         return $this->belongsTo(Status::class, 'status_id');
     }
+    
+    public function fees() {
+        return $this->hasMany(Fee::class);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Repositories\MedicalRegistrationForm;
 
 use App\Exceptions\CustomExceptionHandler;
+use App\Infrastructure\Define\Category;
 use App\Models\MedicalRegistrationForm;
 use App\UseCase\DataCommonFormatter;
 use App\Util\Pagination;
@@ -23,7 +24,7 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
 
     public function getListMedicalRegistrationForm(int $page, int $pageSize, string $keyword, string $sortBy, string $sortType): DataCommonFormatter {
         try {
-            $query = MedicalRegistrationForm::with(['doctor', 'patient', 'category', 'status']);
+            $query = MedicalRegistrationForm::select('medical_registration_forms.*')->with(['doctor', 'patient', 'category', 'status', 'fees']);
             $filterColumn = [];
             if (!empty($keyword) && !empty($filterColumn)) {
                 $query->where($filterColumn[0], $keyword);
