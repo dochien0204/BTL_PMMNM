@@ -44,6 +44,7 @@ class Common {
                     'name' => $category->name,
                     'type' => $category->type,
                     'description' => $category->description,
+                    'cost' => $category->cost,
                 ],
                 'status' => [
                     'id' => $status->id,
