@@ -40,17 +40,13 @@ class TestResultService implements TestResultUseCase {
             return new DataCommonFormatter($statusUnpaid->getException(), null);
         }
 
-        //Create Fee
-        $fee = new Fee();
-        $fee->medical_registration_form_id = $medicalFormId;
-        $fee->status_id = $statusUnpaid->getData()->id;
-        $fee->type = Category::TEST_RESULT;
-        $result = $this->feeRepo->createFee($fee);
-        if ($result->getException() != null) {
-            return new DataCommonFormatter($result->getException(), null);
+        $feeId = null;
+        foreach($medicalForm->getData()->fees as $fee) {
+            if ($fee->type == Category::TEST_RESULT) {
+                $feeId = $fee->id;
+            }
         }
-
-        $testResult->fee_id = $result->getData()->id;
+        $testResult->fee_id = $feeId;
         return $this->testResultRepo->createTestResult($testResult);
     }
 }
