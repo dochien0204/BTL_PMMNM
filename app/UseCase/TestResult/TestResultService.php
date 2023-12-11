@@ -2,6 +2,7 @@
 
 namespace App\UseCase\TestResult;
 
+use App\Infrastructure\Define\Category;
 use App\Infrastructure\Define\Status;
 use App\Infrastructure\Repositories\Fee\IFeeRepository;
 use App\Infrastructure\Repositories\MedicalRegistrationForm\IMedicalRegistrationFormRepository;
@@ -43,6 +44,7 @@ class TestResultService implements TestResultUseCase {
         $fee = new Fee();
         $fee->medical_registration_form_id = $medicalFormId;
         $fee->status_id = $statusUnpaid->getData()->id;
+        $fee->type = Category::TEST_RESULT;
         $result = $this->feeRepo->createFee($fee);
         if ($result->getException() != null) {
             return new DataCommonFormatter($result->getException(), null);

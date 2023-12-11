@@ -13,4 +13,8 @@ class Category
     const NERVE = 'than_kinh';
 
     const DIGEST = 'tieu_hoa';
+
+    const PRECRIPTION = 'precription';
+
+    const TEST_RESULT = 'test_result';
 }
