@@ -147,4 +147,17 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
 
         return new DataCommonFormatter(null, $query->get());
     }
+
+    public function deleteMedicalFormByPatientId(array $listId): bool {
+        try {
+            $deleteRecords = MedicalRegistrationForm::whereIn('id', $listId)->delete();
+            if ($deleteRecords == 0) {
+                return false;
+            }
+        } catch(Exception $e) {
+            return false;
+        }
+
+        return true;
+    }
 }

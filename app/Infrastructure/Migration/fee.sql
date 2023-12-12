@@ -46,3 +46,13 @@ ALTER TABLE `prescriptions` ADD FOREIGN KEY (`fee_id`) REFERENCES `fees` (`id`);
 ALTER TABLE `prescription_medicines` ADD FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`);
 
 ALTER TABLE `prescription_medicines` ADD FOREIGN KEY (`prescription_id`) REFERENCES `prescriptions` (`id`);
+
+ALTER  table fees 
+drop foreign key fees_ibfk_2,
+add constraint fees_medical_form_fee foreign key (medical_registration_form_id) references medical_registration_forms(id) on delete cascade;
+
+ALTER  table test_results  
+drop foreign key test_results_ibfk_1,
+add constraint fees_test_result_fee foreign key (fee_id) references fees(id) on delete cascade;
+
+ALTER TABLE fees ADD COLUMN type varchar(255);
