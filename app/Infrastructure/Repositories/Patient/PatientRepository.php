@@ -141,4 +141,16 @@ class PatientRepository implements IPatientRepository
 
         return new DataCommonFormatter(null, $data);
     }
+
+    public function getListMedicalRecordIdOfPatient(int $patientId) {
+        try {
+            $result = Patient::join("medical_registration_forms", "patients.id", "=", "medical_registration_forms.patient_id")
+                ->where("medical_registration_forms.patient_id", $patientId)
+                ->pluck("medical_registration_forms.id");
+        } catch (Exception $e) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return $result;
+    }
 }

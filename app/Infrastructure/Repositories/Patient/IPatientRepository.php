@@ -22,4 +22,6 @@ interface IPatientRepository
     public function updatePatient(Patient $data): DataCommonFormatter;
 
     public function searchPatients(string $keyword, int $page, int $size, string $sortBy, string $sortType): DataCommonFormatter;
+
+    public function getListMedicalRecordIdOfPatient(int $patientId);
 }

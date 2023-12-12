@@ -2,6 +2,8 @@
 
 namespace App\UseCase\Patient;
 
+use App\Exceptions\CustomExceptionHandler;
+use App\Infrastructure\Repositories\MedicalRegistrationForm\IMedicalRegistrationFormRepository;
 use App\Infrastructure\Repositories\Patient\IPatientRepository;
 use App\Models\Patient;
 use App\UseCase\DataCommonFormatter;
@@ -9,10 +11,12 @@ use App\UseCase\DataCommonFormatter;
 class PatientService implements PatientUseCase
 {
     protected IPatientRepository $patientRepo;
+    private IMedicalRegistrationFormRepository $medicalFormRepo;
 
-    public function __construct(IPatientRepository $patientRepo)
+    public function __construct(IPatientRepository $patientRepo, IMedicalRegistrationFormRepository $medicalFormRepo)
     {
         $this->patientRepo = $patientRepo;
+        $this->medicalFormRepo = $medicalFormRepo;
     }
 
     public function getAllPatients(string $keyword, int $page, int $size, string $sortBy, string $sortType): DataCommonFormatter
@@ -42,6 +46,12 @@ class PatientService implements PatientUseCase
 
     public function deletePatientById(int $id): DataCommonFormatter
     {
+        $listMedicalFormId = $this->patientRepo->getListMedicalRecordIdOfPatient($id);
+        $result = $this->medicalFormRepo->deleteMedicalFormByPatientId($listMedicalFormId->toArray());
+        if (!$result) {
+            return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+        }
+
         return $this->patientRepo->deletePatientById($id);
     }
 

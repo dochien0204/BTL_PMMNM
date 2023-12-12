@@ -16,4 +16,5 @@ interface IMedicalRegistrationFormRepository {
     public function getMedicalFormByDoctor(int $userId, int $page, int $size, string $keyword, string $sortBy, string $sortType): DataCommonFormatter;
     public function countAllMedicalRegistrationFormOfDoctor(int $userId, string $keyword): int;
     public function getListMedicalFormOfPatient(int $patientId, int $statusId): DataCommonFormatter;
+    public function deleteMedicalFormByPatientId(array $listId): bool;
 }
