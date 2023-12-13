@@ -6,6 +6,7 @@ use App\Http\Jobs\SendResetPasswordJob;
 use App\Http\Jobs\VerificationAccountJob;
 use App\Http\Presenter\Response as PresenterResponse;
 use App\Http\Requests\Auth\BlockUserRequest;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\CreateUserRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
@@ -235,6 +236,35 @@ class AuthController extends Controller
                 'Blocked user successfully',
                 $statusBlocked
             );
+        } catch (\Exception $ex) {
+            return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        try {
+            $oldPassword = $request->input('old_password');
+            $email = $request->input('email');
+
+            $isCheckPassword = $this->userService->checkOldPassword($email, $oldPassword);
+            if($isCheckPassword) {
+                $password = $request->input('password');
+                $passwordHashed = Hash::make($password);
+                $isCheckUpdated = $this->userService->updatePassword($email, $passwordHashed);
+                if($isCheckUpdated) {
+                    return PresenterResponse::responseDoesNotData(
+                        Response::HTTP_OK,
+                        'Change password successfully'
+                    );
+                } else {
+                    return PresenterResponse::responseDoesNotData(Response::HTTP_FORBIDDEN, "Change password fail because old password is incorrect");
+                }
+
+            } else {
+                return PresenterResponse::responseDoesNotData(Response::HTTP_FORBIDDEN, "Change password fail because old password is incorrect");
+            }
+
         } catch (\Exception $ex) {
             return PresenterResponse::responseError($ex->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

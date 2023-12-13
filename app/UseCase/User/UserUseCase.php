@@ -26,6 +26,7 @@ interface UserUseCase
 
     public function getDetailUser($id);
 
+    public function checkOldPassword($email, $password);
     public function updatePassword($email, $password);
 
     public function deletePasswordReset($token);

@@ -4,12 +4,14 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class ChangePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -17,16 +19,15 @@ class UpdateUserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, mixed>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'birthday' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|min:10|max:13',
-            'address' => 'nullable|string|max:255',
-            'role' => 'nullable|string|max:255',
+            'email' => 'required|email|exists:users',
+            'old_password' => 'required|string|min:6',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string|min:8',
         ];
     }
 
@@ -35,6 +36,8 @@ class UpdateUserRequest extends FormRequest
         return [
             'string' => 'The :attribute field must be a character string.',
             'required' => 'The :attribute field is not blank.',
+            'exists' => 'The account does not exist, please register an account!',
+            'confirmed' => 'The :attribute field confirmation does not match.',
             'max' => [
                 'number' => 'The :attribute field no greater than :max.',
                 'file' => 'The :attribute field is not more than :max KB.',

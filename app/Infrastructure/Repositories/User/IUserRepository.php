@@ -19,5 +19,6 @@ interface IUserRepository
     public function updateUser($id, $dataUpdate);
 
     public function updatePassword($email, $password);
+    public function checkOldPassword($email, $oldPassword);
     public function findById(int $id): DataCommonFormatter;
 }

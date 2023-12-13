@@ -40,6 +40,7 @@ Route::prefix('users')->group(function () {
 Route::prefix('auth')->group(function () {
     Route::post('/forget-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password/{token}', [AuthController::class, 'resetPassword']);
+    Route::post('/change-password', [AuthController::class, 'changePassword']);
 
     Route::get('/verify-account/{idUser}/{token}', [AuthController::class, 'verificationGet']);
     Route::post('/verification', [AuthController::class, 'verificationSend']);
