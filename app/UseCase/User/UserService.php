@@ -80,6 +80,16 @@ class UserService implements UserUseCase
         return $this->userRepo->updatePassword($email, $password);
     }
 
+    public function checkOldPassword($email, $oldPassword)
+    {
+        $user = $this->userRepo->checkOldPassword($email, $oldPassword);
+
+        if ($user) {
+            return true;
+        }
+        return false;
+    }
+
     public function deletePasswordReset($token)
     {
         return $this->passwordResetTokenRepo->deletePasswordReset($token);

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\UseCase\DataCommonFormatter;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends EloquentRepository implements IUserRepository
 {
@@ -52,12 +53,23 @@ class UserRepository extends EloquentRepository implements IUserRepository
 
     public function updateUser($id, $dataUpdate)
     {
+        info($dataUpdate);
         return $this->_model->find($id)?->update($dataUpdate);
     }
 
     public function updatePassword($email, $password)
     {
         return $this->_model::where('email', $email)?->update(['password' => $password]);
+    }
+
+    public function checkOldPassword($email, $oldPassword)
+    {
+        $user = $this->_model::where('email', $email)->first();
+        if ($user && Hash::check($oldPassword, $user->password)) {
+            return $user;
+        } else {
+            return null;
+        }
     }
 
     public function findById(int $id): DataCommonFormatter {
