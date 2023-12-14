@@ -11,8 +11,10 @@ class Presenter
     {
         return [
             'id' => $user->id,
-            'name' => $user->name,
+            'fullname' => $user->fullname,
+            'username' => $user->username,
             'email' => $user->email,
+            'role' => $user->role,
         ];
     }
 
@@ -21,8 +23,10 @@ class Presenter
         $dataConvert = $listUser->map(function ($data) {
             return [
                 'id' => $data->id,
-                'name' => $data->name,
+                'fullname' => $data->fullname,
+                'username' => $data->username,
                 'email' => $data->email,
+                'role' => $data->role,
             ];
         });
 
