@@ -25,10 +25,12 @@ class UserController extends Controller
     {
 
         $listUser = $this->service->getAllUser();
+
         if ($listUser->getException() != null) {
             return ExceptionHandler::CustomHandleException($listUser->getException());
         }
 
+        info(json_decode(json_encode($listUser->getData()), true));
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Presenter::convertListUserToPresenter($listUser->getData()));
     }
 }
