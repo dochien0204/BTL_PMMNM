@@ -30,7 +30,6 @@ class UserController extends Controller
             return ExceptionHandler::CustomHandleException($listUser->getException());
         }
 
-        info(json_decode(json_encode($listUser->getData()), true));
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, Presenter::convertListUserToPresenter($listUser->getData()));
     }
 }
