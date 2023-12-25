@@ -46,4 +46,22 @@ class CategoryRepository implements ICategoryRepository
 
         return new DataCommonFormatter(null, $data);
     }
+
+    public function createCategory(Category $data): DataCommonFormatter
+    {
+        try {
+            $category = Category::where('code', $data->code)
+                ->first();
+            if ($category != null) {
+                return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+            }
+            $data->save();
+
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $data);
+    }
+
 }

@@ -64,6 +64,17 @@ class PatientController extends Controller
         return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $data->getData());
     }
 
+    public function getPatientLatest()
+    {
+        $data = $this->service->getPatientLatest();
+
+        if ($data->getException() != null) {
+            return ExceptionHandler::CustomHandleException($data->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $data->getData());
+    }
+
     public function createNewPatient(Request $request)
     {
         $payload = $request->only(Payload::PatientPayload);

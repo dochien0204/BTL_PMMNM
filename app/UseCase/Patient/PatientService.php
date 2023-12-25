@@ -39,6 +39,11 @@ class PatientService implements PatientUseCase
         return $this->patientRepo->getPatientById($id);
     }
 
+    public function getPatientLatest(): DataCommonFormatter
+    {
+        return $this->patientRepo->getPatientLatest();
+    }
+
     public function createPatient(Patient $patient): DataCommonFormatter
     {
         return $this->patientRepo->createPatient($patient);

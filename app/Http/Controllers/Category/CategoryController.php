@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Category;
 use App\Config\Message;
 use App\Exceptions\CustomExceptionHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Category\Common;
 use App\Http\Presenter\Response;
 use App\UseCase\Category\CategoryUseCase;
 use App\Util\ExceptionHandler;
@@ -28,6 +29,18 @@ class CategoryController extends Controller
         }
 
         $results = $this->service->getAllCategoryByType($type);
+
+        if ($results->getException() != null) {
+            return ExceptionHandler::CustomHandleException($results->getException());
+        }
+
+        return Response::BaseResponse(HttpResponse::HTTP_OK, Message::SUCCESS, $results->getData());
+    }
+
+    public function createNewCategory(Request $request)
+    {
+        return $request;
+        $results = $this->service->createCategory(Common::convertCategoryPayloadToEntity($request));
         if ($results->getException() != null) {
             return ExceptionHandler::CustomHandleException($results->getException());
         }

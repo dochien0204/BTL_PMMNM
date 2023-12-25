@@ -14,6 +14,8 @@ interface PatientUseCase
     public function countPatients(string $keyword): int;
 
     public function getPatientById(int $id): DataCommonFormatter;
+    
+    public function getPatientLatest(): DataCommonFormatter;
 
     public function createPatient(Patient $patient): DataCommonFormatter;
 

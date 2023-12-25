@@ -75,6 +75,22 @@ class PatientRepository implements IPatientRepository
         }
     }
 
+    public function getPatientLatest(): DataCommonFormatter
+    {
+        try {
+            $data = Patient::latest()->first();
+
+            info(json_encode($data));
+            if ($data == null) {
+                return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+            }
+
+            return new DataCommonFormatter(null, $data);
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+    }
+
     public function createPatient(Patient $data): DataCommonFormatter
     {
         try {

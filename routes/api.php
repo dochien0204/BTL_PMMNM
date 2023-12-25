@@ -59,6 +59,7 @@ Route::prefix('patient')->group(function () {
     Route::get('/alls', [PatientController::class, 'getAllPatient'])->middleware('permission:admin_sys,le_tan');
     Route::get('/search', [PatientController::class, 'searchPatients'])->middleware('permission:admin_sys,le_tan');
     Route::get('/detail', [PatientController::class, 'getPatientById']);
+    Route::get('/get-latest', [PatientController::class, 'getPatientLatest']);
     Route::post('/create', [PatientController::class, 'createNewPatient'])->middleware(['transaction', 'permission:admin_sys,le_tan']);
     Route::delete('/delete', [PatientController::class, 'deletePatientById'])->middleware(['transaction', 'permission:admin_sys,le_tan']);
     Route::put('/update', [PatientController::class, 'updatePatient'])->middleware(['transaction', 'permission:admin_sys,le_tan,bac_si']);
@@ -76,6 +77,7 @@ Route::prefix('medicine')->group(function () {
 //Master data
 Route::prefix('master')->group(function () {
     Route::get('/category', [CategoryController::class, 'getAllCategoryByType']);
+    Route::post('/category', [CategoryController::class, 'createNewCategory']);
     Route::get('/status', [MasterController::class, 'getAllStatusByType']);
 });
 
