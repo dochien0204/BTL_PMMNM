@@ -64,4 +64,31 @@ class CategoryRepository implements ICategoryRepository
         return new DataCommonFormatter(null, $data);
     }
 
+    public function deleteCategoryById(int $id): DataCommonFormatter
+    {
+        try {
+            $category = Category::find($id);
+            if ($category == null) {
+                return new DataCommonFormatter(CustomExceptionHandler::badRequest(), null);
+            }
+            $category->delete();
+
+            return new DataCommonFormatter(null, $category);
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+    }
+
+    public function updateCategory(Category $data): DataCommonFormatter
+    {
+        try {
+            $data->save();
+        } catch (Exception $exc) {
+            return new DataCommonFormatter(CustomExceptionHandler::internalServerError(), null);
+        }
+
+        return new DataCommonFormatter(null, $data);
+
+    }
+
 }

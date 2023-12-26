@@ -14,4 +14,8 @@ interface ICategoryRepository
     public function findById(int $id): DataCommonFormatter;
 
     public function createCategory(Category $data): DataCommonFormatter;
+
+    public function deleteCategoryById(int $id): DataCommonFormatter;
+
+    public function updateCategory(Category $data): DataCommonFormatter;
 }

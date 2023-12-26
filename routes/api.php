@@ -74,10 +74,14 @@ Route::prefix('medicine')->group(function () {
     Route::put('/update', [MedicineController::class, 'updateMedicine'])->middleware('transaction');
 });
 
-//Master data
+//Master data - category
 Route::prefix('master')->group(function () {
     Route::get('/category', [CategoryController::class, 'getAllCategoryByType']);
+    Route::get('/category/detail', [CategoryController::class, 'getCategoryById']);
     Route::post('/category', [CategoryController::class, 'createNewCategory']);
+    Route::put('/category', [CategoryController::class, 'updateCategory'])->middleware('transaction');
+    Route::delete('/category', [CategoryController::class, 'deleteCategory'])->middleware('transaction');
+
     Route::get('/status', [MasterController::class, 'getAllStatusByType']);
 });
 
