@@ -151,9 +151,6 @@ class MedicalRegistrationFormRepository implements IMedicalRegistrationFormRepos
     public function deleteMedicalFormByPatientId(array $listId): bool {
         try {
             $deleteRecords = MedicalRegistrationForm::whereIn('id', $listId)->delete();
-            if ($deleteRecords == 0) {
-                return false;
-            }
         } catch(Exception $e) {
             return false;
         }
